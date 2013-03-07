@@ -2,7 +2,6 @@
 #define GLWIDGET_H
 
 #include <QtOpenGL/QGLWidget>
-
 class GLWidget : public QGLWidget
 {
     Q_OBJECT
