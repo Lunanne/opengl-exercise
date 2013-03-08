@@ -1,5 +1,6 @@
+#define QT_NO_OPENGL_ES_2
+#include <GL/glew.h>
 #include <QApplication>
-#include <QtOpenGL/QGLWidget>
 #include "Graphics/glwidget.h"
 
 int main(int argc, char *argv[])
