@@ -2,7 +2,6 @@
 #include <GL/gl.h>
 #include <QtGui/QMouseEvent>
 #include <QtOpenGL/QGLWidget>
-#include <QGLFormat>
 #include <iostream>
 
 #include "glwidget.h"
