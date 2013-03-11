@@ -1,14 +1,16 @@
 #include <GL/glew.h>
+#include <GL/gl.h>
 #include <QtGui/QMouseEvent>
 #include <QtOpenGL/QGLWidget>
-#include <stdio.h>
-#include <iostream>
 #include <QGLFormat>
+#include <iostream>
 
 #include "glwidget.h"
+#include "objectfileparser.h"
 GLWidget::GLWidget(QWidget *parent):QGLWidget(parent) {
     setMouseTracking(true);
-
+    ObjectFileParser::ParseObjFile();
+    
 }
 GLWidget::~GLWidget()
 {
@@ -26,7 +28,6 @@ void GLWidget::initializeGL() {
     CreateShaders();
     CreateVBO();
     glClearColor(0, 0, 0, 0);
-    std::cout<<glGetString(GL_VERSION);
 }
 
 void GLWidget::resizeGL(int w, int h) {
