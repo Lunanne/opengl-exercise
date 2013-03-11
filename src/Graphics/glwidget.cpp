@@ -1,9 +1,7 @@
 #include <GL/glew.h>
 #include <QtGui/QMouseEvent>
 #include <QtOpenGL/QGLWidget>
-#include <stdio.h>
 #include <iostream>
-#include <QGLFormat>
 
 #include "glwidget.h"
 GLWidget::GLWidget(QWidget *parent):QGLWidget(parent) {

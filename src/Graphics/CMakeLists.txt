@@ -10,9 +10,14 @@ include_directories(${GLEW_INCLUDE_DIRS})
 
 
 add_library(Graphics ${GRAPHICS_H} ${GRAPHICS_SRC})
-qt5_use_modules(Graphics Widgets OpenGL Gui)
+IF(WIN32)
+	target_link_libraries(Graphics ${QT_LIBRARIES})
+ENDIF(WIN32)
 
+IF(UNIX)
+	qt5_use_modules(Graphics Widgets OpenGL Gui)
+ENDIF(UNIX)
+set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
 
 target_link_libraries(Graphics ${OPENGL_LIBRARIES})
 target_link_libraries(Graphics ${GLEW_LIBRARIES})
-target_link_libraries(Graphics ${Qt5Widgets_LIBRARIES})
