@@ -3,10 +3,11 @@
 
 class ObjectFileParser
 {
-// private:
-//   ObjectFileParser();
+  private:
+    
   
 public:
-  static const objectStruct ParseObjFile();
+  ObjectFileParser();
+  const objectStruct ParseObjFile();
 };
 
