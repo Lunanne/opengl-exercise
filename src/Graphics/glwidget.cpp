@@ -7,6 +7,7 @@
 #include "glwidget.h"
 #include "objectfileparser.h"
 GLWidget::GLWidget(QWidget *parent):QGLWidget(parent) {
+	
     setMouseTracking(true);
     ObjectFileParser::ParseObjFile();
     
@@ -17,6 +18,22 @@ GLWidget::~GLWidget()
     DestroyVBO();
 }
 void GLWidget::initializeGL() {
+	VertexShader ="#version 330\n"\
+        "layout(location=0) in vec4 in_Position;\n"\
+        "layout(location=1) in vec4 in_Color;\n"\
+        "out vec4 ex_Color;\n"\
+        "void main(void)\n"\
+        "{\n"\
+        "   gl_Position = in_Position;\n"\
+        "   ex_Color = in_Color;\n"\
+        "}\n";
+		FragmentShader ="#version 330\n"\
+        "in vec4 ex_Color;\n"\
+        "out vec4 out_Color;\n"\
+		"void main(void)\n"\
+        "{\n"\
+        "   out_Color = ex_Color;\n"\
+        "}\n";
     glewInit();
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_DEPTH_TEST);
