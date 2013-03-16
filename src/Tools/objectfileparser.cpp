@@ -4,6 +4,11 @@
 #include <iostream>
 #include <boost/algorithm/string.hpp>
 
+ObjectFileParser::ObjectFileParser()
+{
+  parseFuntions.insert("
+}
+
 const objectStruct ObjectFileParser::ParseObjFile(){
   objectStruct outputValue;
   std::cout<<"reading file \n";

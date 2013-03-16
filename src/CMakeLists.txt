@@ -48,7 +48,6 @@ add_executable(opengl-exercise ${MAIN_SRC})
 
 target_link_libraries(opengl-exercise tools graphics)
 target_link_libraries(opengl-exercise ${OPENGL_LIBRARIES})
-message(${GLEW_LIBRARIES})
 target_link_libraries(opengl-exercise ${GLEW_LIBRARIES})
 
 IF(WIN32)
