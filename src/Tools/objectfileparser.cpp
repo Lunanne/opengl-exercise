@@ -2,11 +2,19 @@
 
 #include <fstream>
 #include <iostream>
+#include <vector>
 #include <boost/algorithm/string.hpp>
+#include <boost/unordered_map.hpp>
 
 ObjectFileParser::ObjectFileParser()
 {
-  parseFuntions.insert("
+	std::function<void(std::string data,objectStruct* object)> ParseName =
+		[](std::string data,objectStruct* object){
+			std::vector<std::string> words;
+			boost::split(words,	data, boost::is_any_of(" "));
+			object->name = words[1];
+	};
+	parseFuntions.insert(std::string("o"),ParseName);
 }
 
 const objectStruct ObjectFileParser::ParseObjFile(){

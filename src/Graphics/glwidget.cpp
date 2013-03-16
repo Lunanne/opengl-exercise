@@ -9,7 +9,6 @@
 GLWidget::GLWidget(QWidget *parent):QGLWidget(parent) {
 	
     setMouseTracking(true);
-    ObjectFileParser::ParseObjFile();
     
 }
 GLWidget::~GLWidget()
@@ -27,7 +26,7 @@ void GLWidget::initializeGL() {
         "   gl_Position = in_Position;\n"\
         "   ex_Color = in_Color;\n"\
         "}\n";
-		FragmentShader ="#version 330\n"\
+	FragmentShader ="#version 330\n"\
         "in vec4 ex_Color;\n"\
         "out vec4 out_Color;\n"\
 		"void main(void)\n"\

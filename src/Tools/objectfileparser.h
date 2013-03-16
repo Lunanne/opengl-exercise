@@ -1,11 +1,10 @@
-
 #include "../Global/structs.h"
+#include <functional>
 #include <map>
-
 class ObjectFileParser
 {
   private:
-    std::map<std::string,std::function<void(std::string data,objectStruct* object)>> parseFuntions;
+	  boost::unordered_map<std::string,std::function<void(std::string data,objectStruct* object)>> parseFuntions;
   
 public:
   ObjectFileParser();
