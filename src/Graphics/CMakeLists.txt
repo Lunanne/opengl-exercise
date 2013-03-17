@@ -13,10 +13,12 @@ set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 
 
 add_library(graphics ${GRAPHICS_H} ${GRAPHICS_SRC})
+
+target_link_libraries(graphics ${GLEW_LIBRARIES})
+target_link_libraries(graphics tools)
 IF(WIN32)
 	target_link_libraries(graphics ${QT_LIBRARIES})
 ENDIF(WIN32)
-target_link_libraries(graphics ${GLEW_LIBRARIES})
 IF(UNIX)
 	qt5_use_modules(graphics Widgets OpenGL Gui)
 ENDIF(UNIX)

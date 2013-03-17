@@ -21,7 +21,7 @@ IF(UNIX)#$on linux at least we can use qt5
 	add_definitions(${Qt5Widgets_DEFINITIONS})
 	set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 ENDIF(UNIX)
-set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++0x -lGLEW ${CMAKE_CXX_FLAGS}")
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(Boost REQUIRED)
@@ -48,7 +48,7 @@ add_executable(opengl-exercise ${MAIN_SRC})
 
 target_link_libraries(opengl-exercise tools graphics)
 target_link_libraries(opengl-exercise ${OPENGL_LIBRARIES})
-target_link_libraries(opengl-exercise ${GLEW_LIBRARIES})
+target_link_libraries(opengl-exercise ${GLEW_LIBRARY})
 
 IF(WIN32)
 message(${QT_LIBRARIES})

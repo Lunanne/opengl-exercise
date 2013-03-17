@@ -3,13 +3,14 @@
 #include <QtGui/QMouseEvent>
 #include <QtOpenGL/QGLWidget>
 #include <iostream>
+#include <boost/concept_check.hpp>
 
 #include "glwidget.h"
-#include "objectfileparser.h"
+#include "../Tools/objectfileparser.h"
 GLWidget::GLWidget(QWidget *parent):QGLWidget(parent) {
-	
+
     setMouseTracking(true);
-    
+
 }
 GLWidget::~GLWidget()
 {
@@ -17,22 +18,22 @@ GLWidget::~GLWidget()
     DestroyVBO();
 }
 void GLWidget::initializeGL() {
-	VertexShader ="#version 330\n"\
-        "layout(location=0) in vec4 in_Position;\n"\
-        "layout(location=1) in vec4 in_Color;\n"\
-        "out vec4 ex_Color;\n"\
-        "void main(void)\n"\
-        "{\n"\
-        "   gl_Position = in_Position;\n"\
-        "   ex_Color = in_Color;\n"\
-        "}\n";
-	FragmentShader ="#version 330\n"\
-        "in vec4 ex_Color;\n"\
-        "out vec4 out_Color;\n"\
-		"void main(void)\n"\
-        "{\n"\
-        "   out_Color = ex_Color;\n"\
-        "}\n";
+    VertexShader ="#version 330\n"\
+                  "layout(location=0) in vec4 in_Position;\n"\
+                  "layout(location=1) in vec4 in_Color;\n"\
+                  "out vec4 ex_Color;\n"\
+                  "void main(void)\n"\
+                  "{\n"\
+                  "   gl_Position = in_Position;\n"\
+                  "   ex_Color = in_Color;\n"\
+                  "}\n";
+    FragmentShader ="#version 330\n"\
+                    "in vec4 ex_Color;\n"\
+                    "out vec4 out_Color;\n"\
+                    "void main(void)\n"\
+                    "{\n"\
+                    "   out_Color = ex_Color;\n"\
+                    "}\n";
     glewInit();
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_DEPTH_TEST);
@@ -43,6 +44,9 @@ void GLWidget::initializeGL() {
     CreateShaders();
     CreateVBO();
     glClearColor(0, 0, 0, 0);
+    
+    ObjectFileParser parser;
+    parser.ParseObjFile();
 }
 
 void GLWidget::resizeGL(int w, int h) {
@@ -90,7 +94,7 @@ void GLWidget::CreateVBO()
 
 
 }
-void GLWidget::DestroyVBO(){
+void GLWidget::DestroyVBO() {
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(0);
 
