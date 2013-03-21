@@ -5,14 +5,7 @@ set(CMAKE_AUTOMOC ON)
   # to always look for includes there:
   set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-IF(WIN32) #the qt5 version on windows is compiled with opengl es2 which has issues with glew
-        find_package(Qt4 COMPONENTS QtCore QtGui QtOpenGL REQUIRED)
-	INCLUDE(${QT_USE_FILE})
-	ADD_DEFINITIONS(${QT_DEFINITIONS})
-	SET(EXTRA_LIBS "glu32.lib" "opengl32.lib")
-ENDIF(WIN32)
 
-IF(UNIX)#$on linux at least we can use qt5
 	find_package(Qt5Core REQUIRED )
 	find_package(Qt5OpenGL REQUIRED)
 	find_package(Qt5Gui REQUIRED)
@@ -20,11 +13,9 @@ IF(UNIX)#$on linux at least we can use qt5
 	include_directories(${Qt5Core_INCLUDE_DIRS} ${Qt5OpenGL_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS})
 	add_definitions(${Qt5Widgets_DEFINITIONS})
 	set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
-ENDIF(UNIX)
 set(CMAKE_CXX_FLAGS "-std=c++0x -lGLEW ${CMAKE_CXX_FLAGS}")
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
-find_package(Boost REQUIRED)
 find_package(GLM REQUIRED)
 
 
@@ -50,11 +41,4 @@ target_link_libraries(opengl-exercise tools graphics)
 target_link_libraries(opengl-exercise ${OPENGL_LIBRARIES})
 target_link_libraries(opengl-exercise ${GLEW_LIBRARY})
 
-IF(WIN32)
-message(${QT_LIBRARIES})
-	target_link_libraries(opengl-exercise ${QT_LIBRARIES})
-ENDIF(WIN32)
-
-IF(UNIX)
 	qt5_use_modules(opengl-exercise Widgets OpenGL Gui)
-ENDIF(UNIX)

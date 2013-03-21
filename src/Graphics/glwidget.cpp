@@ -3,8 +3,6 @@
 #include <QtGui/QMouseEvent>
 #include <QtOpenGL/QGLWidget>
 #include <iostream>
-#include <boost/concept_check.hpp>
-
 #include "glwidget.h"
 #include "../Tools/objectfileparser.h"
 GLWidget::GLWidget(QWidget *parent):QGLWidget(parent) {

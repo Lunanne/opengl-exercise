@@ -1,9 +1,10 @@
+
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
 #include <vector>
 #include <glm/glm.hpp>
-#include <string>
+#include <QString>
 struct faceStruct{
   
   glm::vec4* vertices[3];
@@ -13,8 +14,8 @@ struct faceStruct{
 
 struct objectStruct{
   
-  std::string name;
-  std::string material;
+  QString name;
+  QString material;
   std::vector<glm::vec4> vertices;
   std::vector<glm::vec3> normals;
   std::vector<glm::vec3> texCoords;
