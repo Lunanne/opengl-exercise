@@ -6,10 +6,12 @@ include_directories(../Tools)
 set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 
  set(GRAPHICS_SRC
- glwidget.cpp)
+ glwidget.cpp
+ GraphicsObject.cpp)
  
  set(GRAPHICS_H
- glwidget.h)
+ glwidget.h
+ GraphicsObject.h)
 
 
 add_library(graphics ${GRAPHICS_H} ${GRAPHICS_SRC})

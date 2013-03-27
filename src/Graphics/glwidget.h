@@ -3,6 +3,8 @@
 #include <GL/glew.h>
 #include <QtOpenGL/QGLWidget>
 #include <GL/gl.h>
+
+#include "GraphicsObject.h"
 class GLWidget : public QGLWidget
 {
     Q_OBJECT
@@ -29,6 +31,7 @@ private:
         ColorBufferId;
     const GLchar* VertexShader;
     const GLchar* FragmentShader;
+    GraphicsObject cube;
 
 
 void CreateVBO();

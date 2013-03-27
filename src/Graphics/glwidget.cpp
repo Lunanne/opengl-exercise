@@ -34,17 +34,19 @@ void GLWidget::initializeGL() {
                     "}\n";
     glewInit();
     glDisable(GL_TEXTURE_2D);
-    glDisable(GL_DEPTH_TEST);
     glDisable(GL_COLOR_MATERIAL);
     glEnable(GL_BLEND);
     glEnable(GL_POLYGON_SMOOTH);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_LESS);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     CreateShaders();
     CreateVBO();
-    glClearColor(0, 0, 0, 0);
+    glClearColor(255, 255, 255, 0);
     
     ObjectFileParser parser;
-    parser.ParseObjFile();
+    objectStruct object = parser.ParseObjFile();
+    cube.SetValues(object);
 }
 
 void GLWidget::resizeGL(int w, int h) {
@@ -58,7 +60,7 @@ void GLWidget::resizeGL(int w, int h) {
 
 void GLWidget::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT||GL_DEPTH_BUFFER_BIT);
-    glDrawArrays(GL_TRIANGLES,0,3);
+    glDrawArrays(GL_TRIANGLES,0,12);
 }
 
 void GLWidget::CreateVBO()
@@ -72,6 +74,15 @@ void GLWidget::CreateVBO()
     GLfloat Colors[] = {
         1.0f, 0.0f, 0.0f, 1.0f,
         0.0f, 1.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f, 1.0f,
+        1.0f, 0.0f, 0.0f, 1.0f,
+        0.0f, 1.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f, 1.0f,
+        1.0f, 0.0f, 0.0f, 1.0f,
+        0.0f, 1.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f, 1.0f,
+        1.0f, 0.0f, 0.0f, 1.0f,
+        0.0f, 1.0f, 0.0f, 1.0f,
         0.0f, 0.0f, 1.0f, 1.0f
     };
 
@@ -80,7 +91,7 @@ void GLWidget::CreateVBO()
 
     glGenBuffers(1,&VboId);
     glBindBuffer(GL_ARRAY_BUFFER,VboId);
-    glBufferData(GL_ARRAY_BUFFER,sizeof(Vertices),Vertices,GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER,sizeof(cube.GetVertices()),cube.GetVertices().data(),GL_STATIC_DRAW);
     glVertexAttribPointer(0,4,GL_FLOAT,GL_FALSE,0,0);
     glEnableVertexAttribArray(0);
     glGenBuffers(1, &ColorBufferId);
