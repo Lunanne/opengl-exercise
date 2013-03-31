@@ -1,12 +1,11 @@
-#include "../Global/structs.h"
+#include "structs.h"
 #include <functional>
-#include <map>
-#include <QString>
-#include <qmap.h>
+#include <unordered_map>
+#include <string>
 class ObjectFileParser
 {
 private:
-    QMap<QString,std::function<void(QString,objectStruct*)>> parseFuntions;
+    std::unordered_map<std::string,std::function<void(std::string,objectStruct*)>> parseFunctions;
 
 public:
     ObjectFileParser();
