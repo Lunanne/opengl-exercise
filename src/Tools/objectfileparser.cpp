@@ -50,21 +50,21 @@ ObjectFileParser::ObjectFileParser()
 }
 
 const objectStruct ObjectFileParser::ParseObjFile() {
-    std::cout<<"reading file \n";
-    std::ifstream file ( "Resources/cube.obj" );
-    std::string line;
-    objectStruct output;
-    while(std::getline(file,line)) {
-        //std::cout<<line.substr(0,1)<<"\n";
-        std::function<void(std::string data,objectStruct* object)> function = parseFunctions[line.substr(0,1)];
-        if(function != nullptr)
-            function(line,&output);
-    }
-    std::cout<<"Object name : " <<output.name <<"\n";
-	std::cout<<"Object vertices : \n ";
-    for(GLfloat coord : output.vertices)
-	{
-        std::cout<<coord <<"\n";
-	}
-    return output;
+     std::cout<<"reading file \n";
+     std::ifstream file ( "Resources/cube.obj" );
+     std::string line;
+     objectStruct output;
+     while(std::getline(file,line)) {
+         //std::cout<<line.substr(0,1)<<"\n";
+         std::function<void(std::string data,objectStruct* object)> function = parseFunctions[line.substr(0,1)];
+         if(function != nullptr)
+             function(line,&output);
+     }
+     std::cout<<"Object name : " <<output.name <<"\n";
+ 	std::cout<<"Object vertices : \n ";
+     for(GLfloat coord : output.vertices)
+ 	{
+         std::cout<<coord <<"\n";
+ 	}
+     return output;
 }

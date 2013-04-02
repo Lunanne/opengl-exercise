@@ -1,9 +1,6 @@
 #include	<GL/glut.h>
 #include	<math.h>
 #include <iostream>
-#include "Tools/structs.h"
-#include "Tools/objectfileparser.h"
-objectStruct cube;
 
 GLfloat vertices2[]={1.0f,-1.0f,-1.0f,
                      1.0f, -1.0f,1.0f,
@@ -23,7 +20,8 @@ GLfloat colors2[]   = { 1, 1, 1,   1, 1, 0,   1, 0, 0,   1, 0, 1,
                         0, 0, 0,   0, 0, 1,   1, 0, 1,   1, 0, 0,
                         0, 0, 1,   0, 0, 0,   0, 1, 0,   0, 1, 1 };
 
-GLushort indices[] = {1,2,3,
+GLushort indices[] = {
+    1,2,3,
     1,3,4,
     5,8,7,
     5,7,6,
@@ -48,11 +46,11 @@ void DisplayFunc(void)
     glEnableClientState(GL_COLOR_ARRAY);
     glEnableClientState(GL_VERTEX_ARRAY);
     glColorPointer(3, GL_FLOAT, 0, colors2);
-    glVertexPointer(3, GL_FLOAT, 0, cube.vertices.data());
+    glVertexPointer(3, GL_FLOAT, 0, vertices2);
 
     glPushMatrix();
 
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, cube.faces.data());
+    glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_SHORT, indices);
 
     glPopMatrix();
 
@@ -87,8 +85,9 @@ void KeyboardFunc(unsigned char key, int x, int y)
 
 int	main(int argc, char **argv)
 {
-    ObjectFileParser parser;
-    cube = parser.ParseObjFile();
+    //ObjectFileParser parser;
+    //cube = parser.ParseObjFile();
+    glutInitContextVersion (3, 2);
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
     glutInitWindowSize(800, 600);
@@ -99,7 +98,7 @@ int	main(int argc, char **argv)
     glEnable(GL_DEPTH_TEST);
 
     glutDisplayFunc(&DisplayFunc);
-    glutReshapeFunc(&ReshapeFunc);
+   glutReshapeFunc(&ReshapeFunc);
     glutKeyboardFunc(&KeyboardFunc);
 
     glutMainLoop();

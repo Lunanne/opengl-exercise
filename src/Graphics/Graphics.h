@@ -1,27 +1,18 @@
-#ifndef GLWIDGET_H
-#define GLWIDGET_H
-#include <GL/glew.h>
-#include <QtOpenGL/QGLWidget>
+#ifndef GRAPHICS_H
+#define GRAPHICS_H
 #include <GL/gl.h>
 
 #include "GraphicsObject.h"
-class GLWidget : public QGLWidget
+class Graphics
 {
-    Q_OBJECT
     
 public:
-    GLWidget(QWidget *parent = 0);
-    ~GLWidget();
+    ~Graphics();
 
-protected:
+private:
     void initializeGL();
     void resizeGL(int w, int h);
     void paintGL();
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void keyPressEvent(QKeyEvent *event);
-
-private:
     GLuint
         VertexShaderId,
         FragmentShaderId,
@@ -41,4 +32,4 @@ void DestroyShaders();
 
 };
 
-#endif // GLWIDGET_H
+#endif 
