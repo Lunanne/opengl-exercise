@@ -1,10 +1,12 @@
 include_directories(${OPENGL_INCLUDE_DIR})
 
  set(GRAPHICS_SRC
- Graphics.cpp)
+ Graphics.cpp
+ GraphicsObject.cpp)
 
  set(GRAPHICS_H
- Graphics.h)
+ Graphics.h
+ GraphicsObject.h)
 
 
 add_library(graphics ${GRAPHICS_H} ${GRAPHICS_SRC})

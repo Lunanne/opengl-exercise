@@ -1,19 +1,29 @@
 #include <vector>
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <string>
-class GraphicsObject{
-  
+#include <GL/gl.h>
+class GraphicsObject
+{
+
 private:
-std::string name;
-std::string material;
-std::vector<glm::vec4> vertices;
-std::vector<glm::vec3> normals;
-std::vector<glm::vec3> texCoords;
-std::vector<GLfloat> faces;
- 
+    const GLfloat vertices[9] =
+    {
+        -1.0f, -1.0f, 0.0f,
+        1.0f, -1.0f, 0.0f,
+        0.0f,  1.0f, 0.0f,
+    };
+    GLuint vboID;
+    GLuint vaoID;
+    GLuint matrixID;
+    GLuint programID;
+    glm::mat4 mvpMatrix;
+    void CreateVBO();
+    void DestroyVBO();
 public:
-  GraphicsObject();
- void Render();
- const std::vector<glm::vec4> GetVertices();
- 
+    GraphicsObject(const GLuint &programID);
+    ~GraphicsObject();
+    void Render();
+
+
 };

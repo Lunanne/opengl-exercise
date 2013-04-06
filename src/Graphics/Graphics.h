@@ -1,35 +1,28 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
+#include <GL/glew.h>
 #include <GL/gl.h>
-
 #include "GraphicsObject.h"
 class Graphics
 {
-    
+
 public:
     ~Graphics();
+    void initializeGL();
+    void paintGL();
+
 
 private:
-    void initializeGL();
-    void resizeGL(int w, int h);
-    void paintGL();
-    GLuint
-        VertexShaderId,
-        FragmentShaderId,
-        ProgramId,
-        VaoId,
-        VboId,
-        ColorBufferId;
-    const GLchar* VertexShader;
-    const GLchar* FragmentShader;
-    GraphicsObject cube;
+    void CreateShaders();
+    void DestroyShaders();
 
+    GLuint vertexShaderID;
+    GLuint fragmentShaderID;
+    GLuint programID;
+    const GLchar* vertexShader;
+    const GLchar* fragmentShader;
 
-void CreateVBO();
-void DestroyVBO();
-void CreateShaders();
-void DestroyShaders();
-
+    GraphicsObject* triangle;
 };
 
-#endif 
+#endif

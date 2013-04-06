@@ -1,107 +1,57 @@
-#include	<GL/glut.h>
-#include	<math.h>
+#include <GL/glew.h>
+#include <GL/glfw.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <math.h>
 #include <iostream>
-
-GLfloat vertices2[]={1.0f,-1.0f,-1.0f,
-                     1.0f, -1.0f,1.0f,
-                     -1.0f,-1.0f,1.0f,
-                     -1.0f,-1.0f,-1.0f,
-                     1.0f,1.0f,-0.99f,
-                     0.99f, 1.0f, 1.01f,
-                     -1.00f, 1.0f, 1.0f,
-                     -1.0f,1.0f,-1.0f
-
-};
-
-GLfloat colors2[]   = { 1, 1, 1,   1, 1, 0,   1, 0, 0,   1, 0, 1,
-                        1, 1, 1,   1, 0, 1,   0, 0, 1,   0, 1, 1,
-                        1, 1, 1,   0, 1, 1,   0, 1, 0,   1, 1, 0,
-                        1, 1, 0,   0, 1, 0,   0, 0, 0,   1, 0, 0,
-                        0, 0, 0,   0, 0, 1,   1, 0, 1,   1, 0, 0,
-                        0, 0, 1,   0, 0, 0,   0, 1, 0,   0, 1, 1 };
-
-GLushort indices[] = {
-    1,2,3,
-    1,3,4,
-    5,8,7,
-    5,7,6,
-    1,5,6,
-    1,6,2,
-    2,6,7,
-    2,7,3,
-    3,7,8,
-    3,8,4,
-    5,1,4,
-    5,4,8};
-
-void DisplayFunc(void)
-{
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glLoadIdentity();
-
-    glTranslatef(0, 0, -10);
-
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glColorPointer(3, GL_FLOAT, 0, colors2);
-    glVertexPointer(3, GL_FLOAT, 0, vertices2);
-
-    glPushMatrix();
-
-    glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_SHORT, indices);
-
-    glPopMatrix();
-
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_COLOR_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY);
-
-    glFlush();
-    glutSwapBuffers();
-
-    glutPostRedisplay();
-}
-
-void ReshapeFunc(int width, int height)
-{
-    glMatrixMode(GL_PROJECTION);
-
-    glLoadIdentity();
-    gluPerspective(60, width / (float) height, 5, 15);
-    glViewport(0, 0, width, height);
-
-    glMatrixMode(GL_MODELVIEW);
-    glutPostRedisplay();
-}
-
-void KeyboardFunc(unsigned char key, int x, int y)
-{
-    if ('q' == key || 'Q' == key || 27 == key)
-        exit(0);
-}
+#include <fstream>
+#include <vector>
+#include "Graphics/Graphics.h"
 
 
 int	main(int argc, char **argv)
 {
-    //ObjectFileParser parser;
-    //cube = parser.ParseObjFile();
-    glutInitContextVersion (3, 2);
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-    glutInitWindowSize(800, 600);
-    glutCreateWindow("OpenGL exercise");
+    if( !glfwInit() )
+    {
+        fprintf( stderr, "Failed to initialize GLFW\n" );
+        return -1;
+    }
+
+    glfwOpenWindowHint(GLFW_FSAA_SAMPLES, 4);
+    glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 4);
+    glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 0);
+    glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    if( !glfwOpenWindow( 1024, 768, 0,0,0,0, 32,0, GLFW_WINDOW ) )
+    {
+        fprintf( stderr, "Failed to open GLFW window." );
+        glfwTerminate();
+        return -1;
+    }
+
+    glewExperimental = true;
+    if (glewInit() != GLEW_OK)
+    {
+        fprintf(stderr, "Failed to initialize GLEW\n");
+        return -1;
+    }
+    glfwSetWindowTitle( "OpenGL-exercise" );
 
 
-    glClearColor(0, 0, 0, 0);
-    glEnable(GL_DEPTH_TEST);
+    glfwEnable( GLFW_STICKY_KEYS );
 
-    glutDisplayFunc(&DisplayFunc);
-   glutReshapeFunc(&ReshapeFunc);
-    glutKeyboardFunc(&KeyboardFunc);
+    Graphics graphics;
+    graphics.initializeGL();
 
-    glutMainLoop();
+    do
+    {
+        graphics.paintGL();
+    }
+    while( glfwGetKey( GLFW_KEY_ESC ) != GLFW_PRESS &&
+            glfwGetWindowParam( GLFW_OPENED ) );
+
+    glfwTerminate();
 
     return 0;
 }
+
