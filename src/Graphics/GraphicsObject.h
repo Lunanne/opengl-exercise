@@ -7,16 +7,13 @@ class GraphicsObject
 {
 
 private:
-    const GLfloat vertices[9] =
-    {
-        -1.0f, -1.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,
-        0.0f,  1.0f, 0.0f,
-    };
+
+
     GLuint vboID;
     GLuint vaoID;
     GLuint matrixID;
     GLuint programID;
+    GLuint colourBufferID;
     glm::mat4 mvpMatrix;
     void CreateVBO();
     void DestroyVBO();
