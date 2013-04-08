@@ -11,16 +11,16 @@ Graphics::~Graphics()
 }
 void Graphics::initializeGL()
 {
-vertexShader ="#version 330 core\n"\
-              "layout(location = 0) in vec3 in_position;\n"\
-              "layout(location = 1) in vec3 in_color;\n"\
-              "out vec3 ex_color;\n"\
-              "uniform mat4 MVP;\n"\
-              "void main(){\n"\
-              "gl_Position =  MVP * vec4(in_position,1);\n"\
-              "ex_color =in_color;\n"\
-              "};\n";
-fragmentShader ="#version 330 core\n"\
+    vertexShader ="#version 330 core\n"\
+                  "layout(location = 0) in vec3 in_position;\n"\
+                  "layout(location = 1) in vec3 in_color;\n"\
+                  "out vec3 ex_color;\n"\
+                  "uniform mat4 MVP;\n"\
+                  "void main(){\n"\
+                  "gl_Position =  MVP * vec4(in_position,1);\n"\
+                  "ex_color =in_color;\n"\
+                  "};\n";
+    fragmentShader ="#version 330 core\n"\
                     "in vec3 ex_color;\n"\
                     "out vec3 color;\n"\
                     "void main()\n"\

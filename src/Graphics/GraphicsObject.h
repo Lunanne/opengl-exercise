@@ -14,6 +14,7 @@ private:
     GLuint matrixID;
     GLuint programID;
     GLuint colourBufferID;
+    GLuint indexBufferID;
     glm::mat4 mvpMatrix;
     void CreateVBO();
     void DestroyVBO();
