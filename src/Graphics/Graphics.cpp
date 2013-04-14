@@ -1,8 +1,9 @@
 #include "Graphics.h"
+
 #include <GL/gl.h>
-#include <GL/glut.h>
 #include <GL/glfw.h>
 #include <iostream>
+
 
 Graphics::~Graphics()
 {
@@ -31,6 +32,7 @@ void Graphics::initializeGL()
     std::cout<<"initialized GL \n";
     CreateShaders();
     triangle = new GraphicsObject(programID);
+	
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);

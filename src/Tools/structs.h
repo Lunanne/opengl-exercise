@@ -3,9 +3,9 @@
 #define STRUCTS_H
 
 #include <vector>
-#include <glm/glm.hpp>
+#include <glm.hpp>
 #include <string>
-#include <GL/gl.h>
+#include <GL/GL.h>
 struct objectStruct{
   
   std::string name;

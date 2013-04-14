@@ -12,3 +12,4 @@ include_directories(${OPENGL_INCLUDE_DIR})
 add_library(graphics ${GRAPHICS_H} ${GRAPHICS_SRC})
 
 set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
+target_link_libraries(graphics tools)

@@ -1,17 +1,7 @@
 #include "GraphicsObject.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
-const GLfloat vertices[] =
-{
-    1.0f,-1.0f,-1.0f,
-    1.0f,-1.0f,1.0f,
-    -1.0f,-1.0f,1.0f,
-    -1.0f,-1.0f,-1.0f,
-    1.0f,1.0f,-0.99f,
-    0.99f,1.0f,1.001f,
-    -1.0f,1.0f,1.0f,
-    -1.0f,1.0f,-1.0f,
-};
+#include "../Tools/objectfileparser.h"
 const GLfloat colors[] =
 {
     0.583f,  0.771f,  0.014f,
@@ -52,23 +42,11 @@ const GLfloat colors[] =
     0.982f,  0.099f,  0.879f
 };
 
-const GLushort indices[]
-{
-1,2,3,
-1,3,4,
-5,8,7,
-5,7,6,
-1,5,6,
-1,6,2,
-2,6,7,
-2,7,3,
-3,7,8,
-3,8,4,
-5,1,4,
-5,4,8,
-};
 GraphicsObject::GraphicsObject(const GLuint &programID)
 {
+	ObjectFileParser parser;
+	parser.ParseObjFile(this);
+
     CreateVBO();
     this->programID = programID;
     glm::mat4 projectionMatrix = glm::perspective(45.0f,4.0f/3.0f,0.1f,100.0f);
@@ -82,6 +60,21 @@ GraphicsObject::~GraphicsObject()
 {
     DestroyVBO();
 }
+
+void GraphicsObject::SetName(std::string name)
+{
+	this->name = name;
+}
+void GraphicsObject::AddVertCoord(GLfloat coordinate)
+{
+	verticesCoords.push_back(coordinate);
+}
+
+void GraphicsObject::AddFaceIndex(GLushort faceIndex)
+{
+	faceIndexes.push_back(faceIndex);
+}
+
 void GraphicsObject::CreateVBO()
 {
     glGenVertexArrays(1,&vaoID);
@@ -89,7 +82,7 @@ void GraphicsObject::CreateVBO()
 
     glGenBuffers(1,&vboID);
     glBindBuffer(GL_ARRAY_BUFFER,vboID);
-    glBufferData(GL_ARRAY_BUFFER,sizeof(vertices),vertices,GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER,verticesCoords.size() * sizeof(GLfloat),verticesCoords.data(),GL_STATIC_DRAW);
 
     glGenBuffers(1,&colourBufferID);
     glBindBuffer(GL_ARRAY_BUFFER,colourBufferID);
@@ -97,7 +90,7 @@ void GraphicsObject::CreateVBO()
 
     glGenBuffers(1,&indexBufferID);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,indexBufferID);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(indices),indices,GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER,faceIndexes.size() * sizeof(GLushort),faceIndexes.data(),GL_STATIC_DRAW);
 }
 void GraphicsObject::DestroyVBO()
 {
@@ -128,7 +121,7 @@ void GraphicsObject::Render()
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,indexBufferID);
 
-    glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_SHORT,(void*)0);
+	glDrawElements(GL_TRIANGLES,faceIndexes.size(),GL_UNSIGNED_SHORT,(void*)0);
 
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);

@@ -21,7 +21,7 @@ include_directories(${GLM_INCLUDE_DIRS})
 set(CMAKE_VERBOSE_MAKEFILE true)
 
 #add_subdirectory(Global)
-#add_subdirectory(Tools)
+add_subdirectory(Tools)
 add_subdirectory(Graphics)
 
 
@@ -34,6 +34,6 @@ add_executable(opengl-exercise ${MAIN_SRC})
 
 target_link_libraries(opengl-exercise graphics)
 target_link_libraries(opengl-exercise ${OPENGL_LIBRARIES})
-target_link_libraries(opengl-exercise ${GLFW_LIBRARIES})
+target_link_libraries(opengl-exercise ${GLFW_LIBRARY})
 target_link_libraries(opengl-exercise ${GLEW_LIBRARY})
 target_link_libraries(opengl-exercise ${Boost_LIBRARIES})
