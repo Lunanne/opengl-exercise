@@ -39,7 +39,7 @@ ObjectFileParser::ObjectFileParser()
         {
             if(word.compare("f")!=0)
             {
-				object->AddFaceIndex(boost::lexical_cast<GLshort>(word));
+				object->AddFaceIndex(boost::lexical_cast<GLshort>(word)-1);
             }
         }
     };
@@ -55,7 +55,7 @@ ObjectFileParser::ObjectFileParser()
 const void ObjectFileParser::ParseObjFile(GraphicsObject *object)
 {
     std::cout<<"reading file \n";
-    std::ifstream file ( "./Resources/monkey.obj" );
+    std::ifstream file ( "./Resources/donut.obj" );
     std::string line;
     while(std::getline(file,line))
     {

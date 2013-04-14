@@ -49,8 +49,8 @@ GraphicsObject::GraphicsObject(const GLuint &programID)
 
     CreateVBO();
     this->programID = programID;
-    glm::mat4 projectionMatrix = glm::perspective(45.0f,4.0f/3.0f,0.1f,100.0f);
-    glm::mat4 viewMatrix = glm::lookAt(glm::vec3(4,3,3),glm::vec3(0,0,0),glm::vec3(0,1,0));
+    glm::mat4 projectionMatrix = glm::perspective(60.0f,4.0f/3.0f,0.1f,100.0f);
+    glm::mat4 viewMatrix = glm::lookAt(glm::vec3(0,3,3),glm::vec3(0,0,0),glm::vec3(0,1,0));
     glm::mat4 modelMatrix = glm::mat4(1.0f);
     mvpMatrix = projectionMatrix * viewMatrix*modelMatrix;
     matrixID = glGetUniformLocation(programID,"MVP");
@@ -117,11 +117,12 @@ void GraphicsObject::Render()
 
     glEnableVertexAttribArray(1);
     glBindBuffer(GL_ARRAY_BUFFER,colourBufferID);
-    glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,0,(void*)0);
+   glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,0,(void*)0);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,indexBufferID);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,indexBufferID);
+	//glDrawArrays(GL_LINES,0,verticesCoords.size()/3);
 
-	glDrawElements(GL_TRIANGLES,faceIndexes.size(),GL_UNSIGNED_SHORT,(void*)0);
+	glDrawElements(GL_LINE_STRIP,faceIndexes.size(),GL_UNSIGNED_SHORT,(void*)0);
 
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);

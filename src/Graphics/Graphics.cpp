@@ -26,7 +26,7 @@ void Graphics::initializeGL()
                     "out vec3 color;\n"\
                     "void main()\n"\
                     "{\n"\
-                    "color = ex_color;\n"\
+                    "color = vec3(0.7f,0.7f,0.7f);\n"\
                     "};\n";
 
     std::cout<<"initialized GL \n";
@@ -34,7 +34,7 @@ void Graphics::initializeGL()
     triangle = new GraphicsObject(programID);
 	
 
-    glEnable(GL_DEPTH_TEST);
+  glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 }
 
