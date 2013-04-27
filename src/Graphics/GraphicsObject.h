@@ -15,7 +15,6 @@ private:
     GLuint vaoID;
     GLuint matrixID;
     GLuint programID;
-    GLuint colourBufferID;
     GLuint indexBufferID;
     glm::mat4 mvpMatrix;
 	std::string name;

@@ -1,7 +1,6 @@
 include_directories(../Global/)
 set(TOOLS_H
-objectfileparser.h
-structs.h)
+objectfileparser.h)
 
 set(TOOLS_SRC
 objectfileparser.cpp)

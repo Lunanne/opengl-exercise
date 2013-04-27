@@ -25,7 +25,6 @@ ObjectFileParser::ObjectFileParser()
             if(word.compare("v")!=0)
             {
 				object->AddVertCoord(boost::lexical_cast<GLfloat>(word));
-            //    std::cout<<"parsing vertex data "<<std::endl;
             }
         }
     };
@@ -59,7 +58,6 @@ const void ObjectFileParser::ParseObjFile(GraphicsObject *object)
     std::string line;
     while(std::getline(file,line))
     {
-        //std::cout<<line.substr(0,1)<<"\n";
         std::function<void(std::string data,GraphicsObject* object)> function = parseFunctions[line.substr(0,1)];
         if(function != nullptr)
             function(line,object);
