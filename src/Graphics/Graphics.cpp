@@ -1,7 +1,11 @@
 #include "Graphics.h"
 
-#include <GL/gl.h>
-#include <GL/glfw.h>
+#ifdef __APPLE__
+    #include <OpenGL/gl.h>
+#else
+    #include <GL/gl.h>
+#endif
+#include <glfw/glfw3.h>
 #include <iostream>
 
 
@@ -31,18 +35,18 @@ void Graphics::initializeGL()
     triangle = new GraphicsObject(programID);
 	
 
-  glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 }
 
-void Graphics::paintGL()
+void Graphics::paintGL( GLFWwindow* p_window)
 {
 
     glClear( GL_COLOR_BUFFER_BIT |GL_DEPTH_BUFFER_BIT);
 
     triangle->Render();
 
-    glfwSwapBuffers();
+    glfwSwapBuffers(p_window); //fixme
 }
 
 

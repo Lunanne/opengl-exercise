@@ -1,7 +1,12 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 #include <GL/glew.h>
+#include <glfw/glfw3.h>
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
 #include "GraphicsObject.h"
 class Graphics
 {
@@ -9,7 +14,7 @@ class Graphics
 public:
     ~Graphics();
     void initializeGL();
-    void paintGL();
+    void paintGL(GLFWwindow* p_window);
 
 
 private:

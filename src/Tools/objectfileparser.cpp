@@ -5,6 +5,7 @@
 #include <string>
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
+
 ObjectFileParser::ObjectFileParser()
 {
     std::function<void(std::string data,GraphicsObject* object)> ParseName =

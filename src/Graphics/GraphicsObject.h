@@ -5,8 +5,11 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <string>
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
-
+#endif
 class GraphicsObject
 {
 
@@ -20,7 +23,6 @@ private:
 	std::string name;
 	std::vector<GLfloat> verticesCoords;
 	std::vector<GLshort> faceIndexes;
-
     void CreateVBO();
     void DestroyVBO();
 	
