@@ -1,6 +1,5 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
-#include <GL/glew.h>
 #include <glfw/glfw3.h>
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
@@ -24,8 +23,8 @@ private:
     GLuint vertexShaderID;
     GLuint fragmentShaderID;
     GLuint programID;
-    const GLchar* vertexShader;
-    const GLchar* fragmentShader;
+    char* vertexShader;
+    char* fragmentShader;
 
     GraphicsObject* triangle;
 };

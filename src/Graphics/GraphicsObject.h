@@ -2,7 +2,6 @@
 #define GRAPHICSOBJ_H
 
 #include <vector>
-#include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <string>
 #ifdef __APPLE__

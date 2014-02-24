@@ -1,4 +1,3 @@
-#include <GL/glew.h>
 #include <glfw/glfw3.h>
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
@@ -11,6 +10,8 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <chrono>
+#include <thread>
 #include "Graphics/Graphics.h"
 
 void error_callback(int error, const char* description)
@@ -28,6 +29,10 @@ int	main(int argc, char **argv)
     }
 
     glfwDefaultWindowHints();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     
     GLFWwindow* window = glfwCreateWindow( 1024, 768, "Opengl exercise", NULL, NULL );
     if( !window )
@@ -37,21 +42,15 @@ int	main(int argc, char **argv)
         return -1;
     }
     glfwMakeContextCurrent(window);
-    glewExperimental = true;
-    if (glewInit() != GLEW_OK)
-    {
-        fprintf(stderr, "Failed to initialize GLEW\n");
-        return -1;
-    }
 
     glfwSetInputMode(window, GLFW_STICKY_KEYS, true);
-
     Graphics graphics;
     graphics.initializeGL();
 
     do
     {
         graphics.paintGL( window );
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
     while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
             glfwGetWindowAttrib(window, GLFW_VISIBLE) );

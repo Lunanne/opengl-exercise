@@ -3,6 +3,13 @@
 #include <glm/gtx/transform.hpp>
 #include "../Tools/objectfileparser.h"
 
+#ifdef __APPLE__
+#define GLUT_3_2_CORE_PROFILE 0
+#define glBindVertexArray		glBindVertexArrayAPPLE
+#define glDeleteVertexArrays	glDeleteVertexArraysAPPLE
+#define glGenVertexArrays  	glGenVertexArraysAPPLE
+#endif
+
 GraphicsObject::GraphicsObject(const GLuint &programID)
 {
 	ObjectFileParser parser;
