@@ -1,11 +1,20 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
-#include <glfw/glfw3.h>
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
+
+#ifdef _WIN32
+	#include <Windows.h>
 #endif
+
+#ifdef __APPLE__
+	#include <OpenGL/gl.h>
+	#define GLFW_INCLUDE_GLCOREARB
+#else
+	#include <GL/glew.h>
+	#include <GL/gl.h>
+#endif
+
+#include <glfw/glfw3.h>
+
 #include "GraphicsObject.h"
 class Graphics
 {
@@ -23,8 +32,8 @@ private:
     GLuint vertexShaderID;
     GLuint fragmentShaderID;
     GLuint programID;
-    char* vertexShader;
-    char* fragmentShader;
+    GLchar* vertexShader;
+    GLchar* fragmentShader;
 
     GraphicsObject* triangle;
 };

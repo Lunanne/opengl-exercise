@@ -1,14 +1,20 @@
 #ifndef GRAPHICSOBJ_H
 #define GRAPHICSOBJ_H
 
-#include <vector>
-#include <glm/glm.hpp>
-#include <string>
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
+#ifdef _WIN32
+	#include <Windows.h>
 #endif
+
+#ifdef __APPLE__
+	#include <OpenGL/gl.h>
+#else
+	#include <GL/gl.h>
+#endif
+
+#include <vector>
+#include <string>
+
+#include <glm/glm.hpp>
 class GraphicsObject
 {
 

@@ -1,13 +1,18 @@
-#include "GraphicsObject.h"
+#ifndef __APPLE__
+	#include <GL/glew.h>
+#endif
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
+
 #include "../Tools/objectfileparser.h"
 
+#include "GraphicsObject.h"
+
 #ifdef __APPLE__
-#define GLUT_3_2_CORE_PROFILE 0
-#define glBindVertexArray		glBindVertexArrayAPPLE
-#define glDeleteVertexArrays	glDeleteVertexArraysAPPLE
-#define glGenVertexArrays  	glGenVertexArraysAPPLE
+	#define glBindVertexArray		glBindVertexArrayAPPLE
+	#define glDeleteVertexArrays	glDeleteVertexArraysAPPLE
+	#define glGenVertexArrays  	glGenVertexArraysAPPLE
 #endif
 
 GraphicsObject::GraphicsObject(const GLuint &programID)

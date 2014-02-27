@@ -1,26 +1,23 @@
-#include "Graphics.h"
 
-#ifdef __APPLE__
-    #include <OpenGL/gl.h>
-#else
-    #include <GL/gl.h>
-#endif
-#define GLFW_INCLUDE_GLCOREARB
-#include <glfw/glfw3.h>
 #include <fstream>
 #include <iostream>
+#include <algorithm>
 
-char* readFile(const char* fileName)
+#include "Graphics.h"
+
+
+GLchar* readFile(const char* fileName)
 {
-    char * content= "";
-    std::ifstream file( fileName, std::ios::in);
+    GLchar* content= "";
+    std::ifstream file( fileName, std::ios::in | std::ios::binary);
     if (file)
     {
         file.seekg(0, std::ios::end);
         const int length = file.tellg();
-        content = new char[length];
+        content = new char[length+1];
         file.seekg(0, std::ios::beg);
         file.read(content, length);
+        content[length] = '\0';
     }
     else
     {
@@ -68,7 +65,7 @@ void Graphics::CreateShaders()
     fragmentShader = readFile("./Resources/fragmentShader.frag");
     
     vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShaderID,1,&vertexShader,NULL);
+    glShaderSource(vertexShaderID,1,const_cast<const GLchar**>(&vertexShader),NULL);
     glCompileShader(vertexShaderID);
     
     glGetShaderiv(vertexShaderID, GL_COMPILE_STATUS, &result);
@@ -78,7 +75,7 @@ void Graphics::CreateShaders()
     fprintf(stdout, "vertex shader error output: %s\n", &VertexShaderErrorMessage[0]);
 
     fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShaderID,1,&fragmentShader,NULL);
+	glShaderSource(fragmentShaderID, 1, const_cast<const GLchar**>(&fragmentShader), NULL);
     glCompileShader(fragmentShaderID);
     
     glGetShaderiv(fragmentShaderID, GL_COMPILE_STATUS, &result);
