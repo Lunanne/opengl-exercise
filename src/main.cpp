@@ -43,10 +43,8 @@ int	main(int argc, char **argv)
     }
 
     glfwDefaultWindowHints();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     
     GLFWwindow* window = glfwCreateWindow( 1024, 768, "Opengl exercise", NULL, NULL );
     if( !window )
@@ -57,7 +55,8 @@ int	main(int argc, char **argv)
     }
     glfwMakeContextCurrent(window);
     glfwSetInputMode(window, GLFW_STICKY_KEYS, true);
-
+    glfwSetKeyCallback(window, key_callback);
+    
 #ifndef __APPLE__
 	glewExperimental = true;
 	if (glewInit() != GLEW_OK)
