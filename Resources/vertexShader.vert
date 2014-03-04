@@ -1,5 +1,5 @@
 #version 120 
-in vec3 in_position;
+attribute vec3 in_position;
 uniform mat4 MVP;
 void main()
 {

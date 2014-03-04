@@ -32,6 +32,8 @@ private:
     GLuint vertexShaderID;
     GLuint fragmentShaderID;
     GLuint programID;
+    GLchar* vertexShader;
+    GLchar* fragmentShader;
 
     GraphicsObject* triangle;
 };
