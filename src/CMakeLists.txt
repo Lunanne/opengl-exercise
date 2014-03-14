@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.7)
 project(opengl-exercise)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
-set(CMAKE_CXX_FLAGS "-std=c++0x -o0 ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-W4 -Wall ${CMAKE_CXX_FLAGS}")
 find_package(OpenGL REQUIRED)
 find_package(GLM REQUIRED)
 #find_package(GLUT REQUIRED)
@@ -35,13 +35,20 @@ add_subdirectory(Graphics)
 
 
 set(MAIN_SRC
-main.cpp)
+main.cpp
+Scene.h
+Scene.cpp
+SceneObject.h
+SceneObject.cpp
+types.h)
 
 
 
 add_executable(opengl-exercise ${MAIN_SRC})
 
 target_link_libraries(opengl-exercise graphics)
+target_link_libraries(opengl-exercise tools)
+
 target_link_libraries(opengl-exercise ${OPENGL_LIBRARIES})
 if(APPLE)
     target_link_libraries(opengl-exercise ${CoreVideo_LIBRARIES})

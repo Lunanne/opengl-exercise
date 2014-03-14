@@ -1,4 +1,5 @@
-include_directories(../Global/)
+include_directories(../Graphics/)
+
 set(TOOLS_H
 objectfileparser.h)
 

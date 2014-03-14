@@ -1,14 +1,14 @@
 #ifdef _WIN32
-	#include <Windows.h>
+#include <Windows.h>
 #endif
 
 #ifdef __APPLE__
-	#include <OpenGL/gl.h>
-	#include <OpenGL/glu.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 #else
-	#include <GL/glew.h>
-	#include <GL/gl.h>
-	#include <GL/glu.h>
+#include <GL/glew.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 #endif
 
 #include <glfw/glfw3.h>
@@ -19,7 +19,9 @@
 #include <vector>
 #include <chrono>
 #include <thread>
+
 #include "Graphics/Graphics.h"
+#include "Scene.h"
 
 static void error_callback(int error, const char* description)
 {
@@ -32,46 +34,47 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
         glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
-
 int	main(int argc, char **argv)
 {
     glfwSetErrorCallback(error_callback);
-    if( !glfwInit() )
+    if (!glfwInit())
     {
-        fprintf( stderr, "Failed to initialize GLFW\n" );
+        fprintf(stderr, "Failed to initialize GLFW\n");
         return -1;
     }
 
     glfwDefaultWindowHints();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-    
-    GLFWwindow* window = glfwCreateWindow( 1024, 768, "Opengl exercise", NULL, NULL );
-    if( !window )
+
+    GLFWwindow* window = glfwCreateWindow(1024, 768, "Opengl exercise", NULL, NULL);
+    if (!window)
     {
-        fprintf( stderr, "Failed to open GLFW window." );
+        fprintf(stderr, "Failed to open GLFW window.");
         glfwTerminate();
         return -1;
     }
     glfwMakeContextCurrent(window);
     glfwSetInputMode(window, GLFW_STICKY_KEYS, true);
     glfwSetKeyCallback(window, key_callback);
-    
+
 #ifndef __APPLE__
-	glewExperimental = true;
-	if (glewInit() != GLEW_OK)
-	{
-		fprintf(stderr, "Failed to initialize GLEW\n");
-		return -1;
-	}
+    glewExperimental = true;
+    if (glewInit() != GLEW_OK)
+    {
+        fprintf(stderr, "Failed to initialize GLEW\n");
+        return -1;
+    }
 #endif
 
     Graphics graphics;
-    graphics.initializeGL();
+    graphics.InitializeGL();
+
+    Scene scene("./Resources/cube.obj");
 
     while (!glfwWindowShouldClose(window))
     {
-        graphics.paintGL( window );
+        graphics.PaintGL(window, scene.GetSceneObjects());
         glfwPollEvents();
     }
     glfwDestroyWindow(window);
@@ -80,4 +83,3 @@ int	main(int argc, char **argv)
     return 0;
     exit(EXIT_SUCCESS);
 }
-
