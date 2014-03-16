@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "Graphics\types.h"
+#include "Graphics/GraphicsTypes.h"
 
 class Scene;
 class SceneObject;

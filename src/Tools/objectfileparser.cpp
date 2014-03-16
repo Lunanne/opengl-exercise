@@ -5,14 +5,15 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
 
-#include "../SceneObject.h"
-#include "types.h"
-#include "RenderComponent.h"
+#include <SceneObject.h>
+#include <MainTypes.h>
+#include <Graphics/RenderComponent.h>
 
 #include "objectfileparser.h"
 
-std::function<SceneObjectPtr(std::string p_data)> ParseName =
-[](std::string p_data)
+void ObjectFileParser::CreateFunctions()
+{
+m_parseName = [](std::string p_data)
 {
     std::vector<std::string> words;
     boost::split(words, p_data, boost::is_any_of(" "));
@@ -21,8 +22,7 @@ std::function<SceneObjectPtr(std::string p_data)> ParseName =
     return sceneObject;
 };
 
-std::function<void(std::string p_data, RenderComponentPtr p_renderComponent)> ParseVertices =
-[](std::string p_data, RenderComponentPtr p_renderComponent)
+m_parseVertices = [](std::string p_data, RenderComponentPtr p_renderComponent)
 {
     std::vector<std::string> words;
     boost::split(words, p_data, boost::is_any_of(" "));
@@ -35,8 +35,7 @@ std::function<void(std::string p_data, RenderComponentPtr p_renderComponent)> Pa
     }
 };
 
-std::function<void(std::string p_data, RenderComponentPtr p_renderComponent)> ParseFaces =
-[](std::string p_data, RenderComponentPtr p_renderComponent)
+m_parseFaces = [this](std::string p_data, RenderComponentPtr p_renderComponent)
 {
     std::vector<std::string> words;
     std::vector<std::string> coords;
@@ -46,17 +45,22 @@ std::function<void(std::string p_data, RenderComponentPtr p_renderComponent)> Pa
         if (word.compare("f") != 0)
         {
             boost::split(coords, word, boost::is_any_of("/"));
-            p_renderComponent->AddFaceIndex(boost::lexical_cast<short>(coords[0]) - 1); //todo deal with texture coords
+            p_renderComponent->AddFaceIndex(boost::lexical_cast<short>(coords[0]) - m_faceStartCount); //todo deal with texture coords
         }
     }
 };
-
-ObjectFileParser::ObjectFileParser()
-{
-    std::pair<std::string, std::function<void(std::string, RenderComponentPtr)>> vertex("v ", ParseVertices);
-    std::pair<std::string, std::function<void(std::string, RenderComponentPtr)>> face("f ", ParseFaces);
+    std::pair<std::string, std::function<void(std::string, RenderComponentPtr)>> vertex("v ", m_parseVertices);
+    std::pair<std::string, std::function<void(std::string, RenderComponentPtr)>> face("f ", m_parseFaces);
     m_parseFunctions.insert(vertex);
     m_parseFunctions.insert(face);
+
+}
+
+
+ObjectFileParser::ObjectFileParser():
+m_faceStartCount(1)
+{
+    CreateFunctions();
 }
 
 const void ObjectFileParser::ParseObjFile(const std::string& p_filePath, std::vector<SceneObjectPtr>* p_sceneObjects)
@@ -72,23 +76,28 @@ const void ObjectFileParser::ParseObjFile(const std::string& p_filePath, std::ve
         {
             if (currentObject == NULL)
             {
-                currentObject = ParseName(line);
+                currentObject = m_parseName(line);
                 currentComponent = RenderComponentPtr(new RenderComponent);
             }
             else
             {
+                
+                m_faceStartCount = (currentComponent->GetVertexCount() / 3) + 1;
                 currentObject->SetRenderComponent(currentComponent);
                 p_sceneObjects->push_back(currentObject);
-                currentObject = ParseName(line);
+                currentObject = m_parseName(line);
                 currentComponent = RenderComponentPtr(new RenderComponent);
             }
         }
 
         else
         {
-            std::function<void(std::string data, RenderComponentPtr object)> function = m_parseFunctions[line.substr(0, 2)];
-            if (function != nullptr)
+            std::string key = line.substr(0, 2);
+            if ( m_parseFunctions.count(key) >0)
+            {
+                std::function<void(std::string data, RenderComponentPtr object)> function = m_parseFunctions.at(key);
                 function(line, currentComponent);
+            }
         }
     }
 

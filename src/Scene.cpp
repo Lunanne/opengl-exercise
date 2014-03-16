@@ -1,7 +1,7 @@
 #include <vector>
 #include <iostream>
 
-#include "Tools\objectfileparser.h"
+#include "Tools/objectfileparser.h"
 
 #include "Scene.h"
 

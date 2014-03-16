@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.7)
 project(opengl-exercise)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
-set(CMAKE_CXX_FLAGS "-W4 -Wall ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-Werror -Wall -std=c++11 ${CMAKE_CXX_FLAGS}")
 find_package(OpenGL REQUIRED)
 find_package(GLM REQUIRED)
 #find_package(GLUT REQUIRED)
@@ -27,20 +27,21 @@ include_directories(${GLEW_INCLUDE_DIR})
 include_directories(${OPENGL_INCLUDE_DIRS})
 include_directories(${GLM_INCLUDE_DIRS})
 
-set(CMAKE_VERBOSE_MAKEFILE true)
-
-#add_subdirectory(Global)
 add_subdirectory(Tools)
 add_subdirectory(Graphics)
+
+include_directories(Graphics)
 
 
 set(MAIN_SRC
 main.cpp
-Scene.h
 Scene.cpp
+SceneObject.cpp)
+
+set(MAIN_H
+Scene.h
 SceneObject.h
-SceneObject.cpp
-types.h)
+MainTypes.h)
 
 
 
@@ -49,13 +50,14 @@ add_executable(opengl-exercise ${MAIN_SRC})
 target_link_libraries(opengl-exercise graphics)
 target_link_libraries(opengl-exercise tools)
 
+target_link_libraries(opengl-exercise ${GLFW_LIBRARY})
+target_link_libraries(opengl-exercise ${GLEW_LIBRARY})
+target_link_libraries(opengl-exercise ${Boost_LIBRARIES})
+
+
 target_link_libraries(opengl-exercise ${OPENGL_LIBRARIES})
 if(APPLE)
     target_link_libraries(opengl-exercise ${CoreVideo_LIBRARIES})
     target_link_libraries(opengl-exercise ${IOKit_LIBRARIES})
     target_link_libraries(opengl-exercise ${COCOA_LIBRARY})
 endif (APPLE)
-
-target_link_libraries(opengl-exercise ${GLFW_LIBRARIES})
-target_link_libraries(opengl-exercise ${GLEW_LIBRARY})
-target_link_libraries(opengl-exercise ${Boost_LIBRARIES})

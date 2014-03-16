@@ -25,20 +25,22 @@ public:
     void Render();
     void AddVertCoord(GLfloat p_coordinate);
     void AddFaceIndex(GLushort p_faceIndex);
+    const int GetVertexCount() const;
 
 private:
-    GLuint               m_vboID;
-    GLuint               m_vaoID;
-    GLuint               m_matrixID;
-    GLuint               m_programID;
-    GLuint               m_indexBufferID;
-    GLuint               m_vertexShaderID;
-    GLuint               m_fragmentShaderID;
-    GLchar*              m_vertexShader;
-    GLchar*              m_fragmentShader;
-    glm::mat4            m_mvpMatrix;
-    std::vector<GLfloat> m_verticesCoords;
-    std::vector<GLshort> m_faceIndexes;
+    GLuint                     m_vboID;
+    GLuint                     m_vaoID;
+    GLuint                     m_matrixID;
+    GLuint                     m_programID;
+    GLuint                     m_indexBufferID;
+    GLuint                     m_vertexShaderID;
+    GLuint                     m_fragmentShaderID;
+    const GLchar*              m_vertexShader;
+    const GLchar*              m_fragmentShader;
+    glm::mat4                  m_mvpMatrix;
+    std::vector<GLfloat>       m_verticesCoords;
+    std::vector<GLshort>       m_faceIndexes;
+    bool                       m_vertexDataChanged;
 
     void CreateVBO();
     void DestroyVBO();

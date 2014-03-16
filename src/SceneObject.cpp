@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "Graphics\RenderComponent.h"
+#include "Graphics/RenderComponent.h"
 
 #include "SceneObject.h"
 
@@ -14,7 +14,6 @@ void SceneObject::Render()
     if (m_renderComponent != NULL)
     {
         m_renderComponent->Render();
-        std::cout << "Rendered object named : " << m_name << std::endl;
     }
 }
 

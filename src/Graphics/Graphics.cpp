@@ -1,6 +1,6 @@
 #include <vector>
 
-#include "..\SceneObject.h"
+#include <SceneObject.h>
 
 #include "Graphics.h"
 

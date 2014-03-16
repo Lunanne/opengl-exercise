@@ -1,4 +1,5 @@
 include_directories(${OPENGL_INCLUDE_DIR})
+include_directories("..")
 
  set(GRAPHICS_SRC
  Graphics.cpp
@@ -6,8 +7,9 @@ include_directories(${OPENGL_INCLUDE_DIR})
 
  set(GRAPHICS_H
  Graphics.h
+ GraphicsTypes.h
  RenderComponent.h
- types.h)
+ GraphicsTypes.h)
 
 
 add_library(graphics ${GRAPHICS_H} ${GRAPHICS_SRC})

@@ -19,9 +19,9 @@
 #define glGenVertexArrays  	glGenVertexArraysAPPLE
 #endif
 
-GLchar* readFile(const char* p_fileName)
+const GLchar* readFile(const char* p_fileName)
 {
-    GLchar* content = "";
+    GLchar* content;
     std::ifstream file(p_fileName, std::ios::in | std::ios::binary);
     if (file)
     {
@@ -31,18 +31,21 @@ GLchar* readFile(const char* p_fileName)
         file.seekg(0, std::ios::beg);
         file.read(content, length);
         content[length] = '\0';
+        
+        return content;
     }
     else
     {
         std::printf("Can't open file at %s \n", p_fileName);
     }
-    return content;
+    return "";
 }
 
-RenderComponent::RenderComponent()
+RenderComponent::RenderComponent():
+m_vertexDataChanged(false)
 {
-    CreateShaders();
     CreateVBO();
+    CreateShaders();
     glm::mat4 projectionMatrix = glm::perspective(60.0f, 4.0f / 3.0f, 0.1f, 100.0f);
     glm::mat4 viewMatrix = glm::lookAt(glm::vec3(4, 3, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
     glm::mat4 modelMatrix = glm::mat4(1.0f);
@@ -52,16 +55,19 @@ RenderComponent::RenderComponent()
 RenderComponent::~RenderComponent()
 {
     DestroyVBO();
+    DestroyShaders();
 }
 
 void RenderComponent::AddVertCoord(GLfloat coordinate)
 {
     m_verticesCoords.push_back(coordinate);
+    m_vertexDataChanged = true;
 }
 
 void RenderComponent::AddFaceIndex(GLushort faceIndex)
 {
     m_faceIndexes.push_back(faceIndex);
+    m_vertexDataChanged = true;
 }
 
 void RenderComponent::CreateVBO()
@@ -76,6 +82,7 @@ void RenderComponent::CreateVBO()
     glGenBuffers(1, &m_indexBufferID);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferID);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_faceIndexes.size() * sizeof(GLushort), m_faceIndexes.data(), GL_STATIC_DRAW);
+    m_vertexDataChanged = false;
 }
 void RenderComponent::DestroyVBO()
 {
@@ -91,6 +98,10 @@ void RenderComponent::DestroyVBO()
 }
 void RenderComponent::Render()
 {
+    if(m_vertexDataChanged)
+    {
+        CreateVBO();
+    }
     glUseProgram(m_programID);
 
     glUniformMatrix4fv(m_matrixID, 1, GL_FALSE, &m_mvpMatrix[0][0]);
@@ -170,4 +181,9 @@ void RenderComponent::DestroyShaders()
     glDeleteProgram(m_programID);
     delete m_vertexShader;
     delete m_fragmentShader;
+}
+
+const int RenderComponent::GetVertexCount() const
+{
+    return m_verticesCoords.size();
 }
