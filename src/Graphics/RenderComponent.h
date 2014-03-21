@@ -17,14 +17,14 @@
 
 #include <glm/glm.hpp>
 
+#include "GraphicsTypes.h"
+
 class RenderComponent
 {
 public:
-    RenderComponent();
+    RenderComponent(std::vector<Vertex> p_vertices);
     ~RenderComponent();
     void Render();
-    void AddVertCoord(GLfloat p_coordinate);
-    void AddFaceIndex(GLushort p_faceIndex);
     const int GetVertexCount() const;
 
 private:
@@ -32,18 +32,16 @@ private:
     GLuint                     m_vaoID;
     GLuint                     m_matrixID;
     GLuint                     m_programID;
-    GLuint                     m_indexBufferID;
     GLuint                     m_vertexShaderID;
     GLuint                     m_fragmentShaderID;
     const GLchar*              m_vertexShader;
     const GLchar*              m_fragmentShader;
     glm::mat4                  m_mvpMatrix;
-    std::vector<GLfloat>       m_verticesCoords;
-    std::vector<GLshort>       m_faceIndexes;
+    std::vector<Vertex>        m_verticesCoords;
     bool                       m_vertexDataChanged;
 
-    void CreateVBO();
-    void DestroyVBO();
+    void CreateVAO();
+    void DestroyVAO();
     void CreateShaders();
     void DestroyShaders();
 };

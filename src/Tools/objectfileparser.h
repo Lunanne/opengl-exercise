@@ -6,27 +6,32 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <string>
 
 #include "../MainTypes.h"
 #include "../Graphics/GraphicsTypes.h"
 
-typedef std::function<void(const std::string&, RenderComponentPtr)> ParsingFunction;
+typedef std::vector<std::string> Words;
+typedef std::function<void(Words&)> ParsingFunction;
 
 class ObjectFileParser
 {
-    
 public:
     ObjectFileParser();
     const void ParseObjFile(const std::string& p_filePath, std::vector<SceneObjectPtr>* p_sceneObjects);
 
 private:
     int m_faceStartCount;
+    std::vector<Vertex> m_indexedVertices;
+    std::vector<Face>   m_faces;
+
     std::unordered_map<std::string, ParsingFunction > m_parseFunctions;
     std::function<SceneObjectPtr(std::string p_data)> m_parseName;
-    std::function<void(std::string p_data, RenderComponentPtr p_renderComponent)> m_parseVertices;
-    std::function<void(std::string p_data, RenderComponentPtr p_renderComponent)> m_parseFaces;
-    
+    ParsingFunction m_parseVertices;
+    ParsingFunction m_parseFaces;
+
     void CreateFunctions();
+    RenderComponentPtr CreateRenderComponent();
 };
 
 #endif

@@ -44,8 +44,8 @@ int	main(int argc, char **argv)
     }
 
     glfwDefaultWindowHints();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 
     GLFWwindow* window = glfwCreateWindow(1024, 768, "Opengl exercise", NULL, NULL);
     if (!window)

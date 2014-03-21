@@ -6,5 +6,16 @@
 class Graphics;
 class RenderComponent;
 
+struct Vertex
+{
+    float x;
+    float y;
+    float z;
+};
+
+struct Face
+{
+    short vertexIndex;
+};
 typedef std::shared_ptr<RenderComponent> RenderComponentPtr;
 #endif

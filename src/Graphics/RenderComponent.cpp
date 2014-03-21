@@ -31,7 +31,7 @@ const GLchar* readFile(const char* p_fileName)
         file.seekg(0, std::ios::beg);
         file.read(content, length);
         content[length] = '\0';
-        
+
         return content;
     }
     else
@@ -41,12 +41,13 @@ const GLchar* readFile(const char* p_fileName)
     return "";
 }
 
-RenderComponent::RenderComponent():
-m_vertexDataChanged(false)
+RenderComponent::RenderComponent(std::vector<Vertex> p_vertices) :
+m_vertexDataChanged(false),
+m_verticesCoords(p_vertices)
 {
-    CreateVBO();
+    CreateVAO();
     CreateShaders();
-    glm::mat4 projectionMatrix = glm::perspective(60.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+    glm::mat4 projectionMatrix = glm::perspective(60.0f, 4.0f / 3.0f, 0.01f, 200.0f);
     glm::mat4 viewMatrix = glm::lookAt(glm::vec3(4, 3, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
     glm::mat4 modelMatrix = glm::mat4(1.0f);
     m_mvpMatrix = projectionMatrix * viewMatrix * modelMatrix;
@@ -54,37 +55,23 @@ m_vertexDataChanged(false)
 }
 RenderComponent::~RenderComponent()
 {
-    DestroyVBO();
+    DestroyVAO();
     DestroyShaders();
 }
 
-void RenderComponent::AddVertCoord(GLfloat coordinate)
-{
-    m_verticesCoords.push_back(coordinate);
-    m_vertexDataChanged = true;
-}
-
-void RenderComponent::AddFaceIndex(GLushort faceIndex)
-{
-    m_faceIndexes.push_back(faceIndex);
-    m_vertexDataChanged = true;
-}
-
-void RenderComponent::CreateVBO()
+void RenderComponent::CreateVAO()
 {
     glGenVertexArrays(1, &m_vaoID);
     glBindVertexArray(m_vaoID);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
     glGenBuffers(1, &m_vboID);
     glBindBuffer(GL_ARRAY_BUFFER, m_vboID);
-    glBufferData(GL_ARRAY_BUFFER, m_verticesCoords.size() * sizeof(GLfloat), m_verticesCoords.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, m_verticesCoords.size() * 3 * sizeof(GLfloat), m_verticesCoords.data(), GL_STATIC_DRAW);
 
-    glGenBuffers(1, &m_indexBufferID);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferID);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_faceIndexes.size() * sizeof(GLushort), m_faceIndexes.data(), GL_STATIC_DRAW);
     m_vertexDataChanged = false;
 }
-void RenderComponent::DestroyVBO()
+void RenderComponent::DestroyVAO()
 {
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(0);
@@ -98,21 +85,19 @@ void RenderComponent::DestroyVBO()
 }
 void RenderComponent::Render()
 {
-    if(m_vertexDataChanged)
-    {
-        CreateVBO();
-    }
+    glLoadIdentity();
+    glDisable(GL_CULL_FACE);
+
+    CreateVAO();
     glUseProgram(m_programID);
 
     glUniformMatrix4fv(m_matrixID, 1, GL_FALSE, &m_mvpMatrix[0][0]);
 
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, m_vboID);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    glBufferData(GL_ARRAY_BUFFER, m_verticesCoords.size() * 3 * sizeof(GLfloat), m_verticesCoords.data(), GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferID);
-
-    glDrawElements(GL_LINE_STRIP, m_faceIndexes.size(), GL_UNSIGNED_SHORT, (void*)0);
+    glDrawArrays(GL_LINES, 0, m_verticesCoords.size() * 3);
 
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
