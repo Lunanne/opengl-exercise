@@ -5,14 +5,13 @@
 #include <Windows.h>
 #endif
 
-#include <glfw/glfw3.h>
-
 #ifdef __APPLE__
 #define GLFW_INCLUDE_GLCOREARB
 #else
 #include <GL/glew.h>
 #endif
 
+#include <glfw/glfw3.h>
 
 #include "../MainTypes.h"
 

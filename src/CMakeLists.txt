@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 2.8.7)
 project(opengl-exercise)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
-set(CMAKE_CXX_FLAGS "-Werror -Wall -std=c++11 ${CMAKE_CXX_FLAGS}")
 find_package(OpenGL REQUIRED)
 find_package(GLM REQUIRED)
 #find_package(GLUT REQUIRED)
@@ -50,7 +49,7 @@ add_executable(opengl-exercise ${MAIN_SRC})
 target_link_libraries(opengl-exercise graphics)
 target_link_libraries(opengl-exercise tools)
 
-target_link_libraries(opengl-exercise ${GLFW_LIBRARY})
+target_link_libraries(opengl-exercise ${GLFW_LIBRARIES})
 target_link_libraries(opengl-exercise ${GLEW_LIBRARY})
 target_link_libraries(opengl-exercise ${Boost_LIBRARIES})
 
