@@ -2,9 +2,15 @@
 #include <GL/glew.h>
 #endif
 
+#ifdef __APPLE__
+#include <OpenGL/gl3.h>
+#include <OpenGL/glu.h>
+#endif
+
 #include <fstream>
 #include <iostream>
 #include <algorithm>
+
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
@@ -13,11 +19,12 @@
 
 #include "RenderComponent.h"
 
+/*
 #ifdef __APPLE__
 #define glBindVertexArray		glBindVertexArrayAPPLE
 #define glDeleteVertexArrays	glDeleteVertexArraysAPPLE
-#define glGenVertexArrays  	glGenVertexArraysAPPLE
-#endif
+#define glGenVertexArrays  	glGenVertexArraysA
+#endif*/
 
 const GLchar* readFile(const char* p_fileName)
 {
@@ -61,24 +68,25 @@ RenderComponent::~RenderComponent()
 
 void RenderComponent::CreateVAO()
 {
+  
+    glGenVertexArrays(1, &m_vaoID);
     GLenum errCode;
     const GLubyte *errString;
-
-    glGenVertexArrays(1, &m_vaoID);
-    glBindVertexArray(m_vaoID);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
+    
     if ((errCode = glGetError()) != GL_NO_ERROR) {
         errString = gluErrorString(errCode);
-        fprintf(stderr, "OpenGL Error in CreateVAO: %s\n", errString);
+        fprintf(stderr, "OpenGL Error in RenderComponent: %s\n", errString);
     }
-
+    glBindVertexArray(m_vaoID);
+    
     glGenBuffers(1, &m_vboID);
     glBindBuffer(GL_ARRAY_BUFFER, m_vboID);
 
     glBufferData(GL_ARRAY_BUFFER, m_verticesCoords.size() * 3 * sizeof(GLfloat), m_verticesCoords.data(), GL_STATIC_DRAW);
-
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    
+    glEnableVertexAttribArray(0);
+    glBindVertexArray(0);
     m_vertexDataChanged = false;
 }
 void RenderComponent::DestroyVAO()
@@ -102,22 +110,12 @@ void RenderComponent::Render()
 
     glUniformMatrix4fv(m_matrixID, 1, GL_FALSE, &m_mvpMatrix[0][0]);
 
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vboID);
-    // glBufferData(GL_ARRAY_BUFFER, m_verticesCoords.size() * 3 * sizeof(GLfloat), m_verticesCoords.data(), GL_STATIC_DRAW);
+    glBindVertexArray(m_vaoID);
+    
+    glDrawArrays(GL_POINTS, 0, m_verticesCoords.size());
 
-    glDrawArrays(GL_POINTS, 0, m_verticesCoords.size() * 3);
-
-    glDisableVertexAttribArray(0);
-    glDisableVertexAttribArray(1);
-
-    GLenum errCode;
-    const GLubyte *errString;
-
-    if ((errCode = glGetError()) != GL_NO_ERROR) {
-        errString = gluErrorString(errCode);
-        fprintf(stderr, "OpenGL Error in Render: %s\n", errString);
-    }
+    glBindVertexArray(0);
+ 
 }
 
 void RenderComponent::CreateShaders()

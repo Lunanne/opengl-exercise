@@ -60,14 +60,14 @@ const void ObjectFileParser::ParseObjFile(const std::string& p_filePath, std::ve
     std::cout << "reading file \n";
     std::ifstream file(p_filePath);
     std::string line;
-    SceneObjectPtr currentObject = NULL;
+    SceneObjectPtr currentObject = nullptr;
     Words words;
     while (std::getline(file, line))
     {
         boost::split(words, line, boost::is_any_of(" "));
         if (words[0].compare("o") == 0)
         {
-            if (currentObject == NULL)
+            if (currentObject == nullptr)
             {
                 currentObject = m_parseName(line);
             }
@@ -90,7 +90,7 @@ const void ObjectFileParser::ParseObjFile(const std::string& p_filePath, std::ve
         }
     }
 
-    if (currentObject != NULL)
+    if (currentObject != nullptr)
     {
         currentObject->SetRenderComponent(CreateRenderComponent());
         p_sceneObjects->push_back(currentObject);

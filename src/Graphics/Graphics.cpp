@@ -1,3 +1,7 @@
+#ifdef __APPLE__
+#include <OpenGL/glu.h>
+#endif
+
 #include <vector>
 
 #include <SceneObject.h>
@@ -10,6 +14,13 @@ Graphics::~Graphics()
 }
 void Graphics::InitializeGL()
 {
+    GLenum errCode;
+    const GLubyte *errString;
+    if ((errCode = glGetError()) != GL_NO_ERROR) {
+        errString = gluErrorString(errCode);
+        fprintf(stderr, "OpenGL Error in Graphics: %s\n", errString);
+    }
+
     glEnable(GL_DEPTH_TEST);
 
     glDepthFunc(GL_LESS);
