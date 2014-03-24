@@ -61,12 +61,22 @@ RenderComponent::~RenderComponent()
 
 void RenderComponent::CreateVAO()
 {
+    GLenum errCode;
+    const GLubyte *errString;
+
     glGenVertexArrays(1, &m_vaoID);
     glBindVertexArray(m_vaoID);
+
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+    if ((errCode = glGetError()) != GL_NO_ERROR) {
+        errString = gluErrorString(errCode);
+        fprintf(stderr, "OpenGL Error in CreateVAO: %s\n", errString);
+    }
 
     glGenBuffers(1, &m_vboID);
     glBindBuffer(GL_ARRAY_BUFFER, m_vboID);
+
     glBufferData(GL_ARRAY_BUFFER, m_verticesCoords.size() * 3 * sizeof(GLfloat), m_verticesCoords.data(), GL_STATIC_DRAW);
 
     m_vertexDataChanged = false;
@@ -85,22 +95,29 @@ void RenderComponent::DestroyVAO()
 }
 void RenderComponent::Render()
 {
-    glLoadIdentity();
     glDisable(GL_CULL_FACE);
 
-    CreateVAO();
+    //CreateVAO();
     glUseProgram(m_programID);
 
     glUniformMatrix4fv(m_matrixID, 1, GL_FALSE, &m_mvpMatrix[0][0]);
 
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, m_vboID);
-    glBufferData(GL_ARRAY_BUFFER, m_verticesCoords.size() * 3 * sizeof(GLfloat), m_verticesCoords.data(), GL_STATIC_DRAW);
+    // glBufferData(GL_ARRAY_BUFFER, m_verticesCoords.size() * 3 * sizeof(GLfloat), m_verticesCoords.data(), GL_STATIC_DRAW);
 
-    glDrawArrays(GL_LINES, 0, m_verticesCoords.size() * 3);
+    glDrawArrays(GL_POINTS, 0, m_verticesCoords.size() * 3);
 
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
+
+    GLenum errCode;
+    const GLubyte *errString;
+
+    if ((errCode = glGetError()) != GL_NO_ERROR) {
+        errString = gluErrorString(errCode);
+        fprintf(stderr, "OpenGL Error in Render: %s\n", errString);
+    }
 }
 
 void RenderComponent::CreateShaders()

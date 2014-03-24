@@ -106,7 +106,7 @@ RenderComponentPtr ObjectFileParser::CreateRenderComponent()
         Vertex v = m_indexedVertices.at(face.vertexIndex);
         vertices.push_back(v);
     }
-    m_indexedVertices.crbegin();
+    m_indexedVertices.clear();
     m_faces.clear();
     return RenderComponentPtr(new RenderComponent(vertices));
 }

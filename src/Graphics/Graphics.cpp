@@ -11,6 +11,7 @@ Graphics::~Graphics()
 void Graphics::InitializeGL()
 {
     glEnable(GL_DEPTH_TEST);
+
     glDepthFunc(GL_LESS);
     glClearColor(0, 0, 0, 0);
 }
