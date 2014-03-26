@@ -8,7 +8,7 @@
 Scene::Scene(const std::string& p_filePath)
 {
     ObjectFileParser parser;
-    parser.ParseObjFile(p_filePath, &m_sceneObjects);
+    parser.ParseObjFile(p_filePath, m_sceneObjects);
     std::cout << "Number of read objects : " << m_sceneObjects.size() << std::endl;
 }
 

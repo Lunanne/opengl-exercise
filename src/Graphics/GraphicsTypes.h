@@ -2,8 +2,10 @@
 #define GRAPHICS_TYPES_H
 
 #include <memory>
+#include <vector>
 
 class Graphics;
+class Material;
 class RenderComponent;
 
 struct Vertex
@@ -13,9 +15,24 @@ struct Vertex
     float z;
 };
 
+struct TextureVertex
+{
+    float u;
+    float v;
+};
+
 struct Face
 {
-    short vertexIndex;
+    std::vector<short> vertexIndexes;
+    std::vector<short> textureIndexes;
 };
+
+struct Colour
+{
+    float r;
+    float g;
+    float b;
+};
+
 typedef std::shared_ptr<RenderComponent> RenderComponentPtr;
 #endif

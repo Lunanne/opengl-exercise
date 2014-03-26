@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <unordered_map>
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -13,40 +14,61 @@
 
 void ObjectFileParser::CreateFunctions()
 {
-    m_parseName = [](std::string p_data)
+    m_parseName = [](Words& words)
     {
-        std::vector<std::string> words;
-        boost::split(words, p_data, boost::is_any_of(" "));
-        SceneObjectPtr sceneObject = SceneObjectPtr(new SceneObject());
-        sceneObject->SetName(words[1]);
-        return sceneObject;
+        return SceneObjectPtr(new SceneObject(words[0]));
     };
 
-    m_parseVertices = [this](Words p_data)
+    m_parseVertices = [this](Words& words)
     {
         Vertex v;
-        v.x = boost::lexical_cast<float>(p_data[0]);
-        v.y = boost::lexical_cast<float>(p_data[1]);
-        v.z = boost::lexical_cast<float>(p_data[2]);
+        v.x = boost::lexical_cast<float>(words[0]);
+        v.y = boost::lexical_cast<float>(words[1]);
+        v.z = boost::lexical_cast<float>(words[2]);
         m_indexedVertices.push_back(v);
     };
 
-    m_parseFaces = [this](Words p_data)
+    m_parseFaces = [this](Words& words)
     {
         std::vector<std::string> coords;
-        for (std::string word : p_data)
+        for (std::string word : words)
         {
             boost::split(coords, word, boost::is_any_of("/"));
             Face f;
-            f.vertexIndex = boost::lexical_cast<short>(coords[0]) - m_faceStartCount;
+            f.vertexIndexes.push_back(boost::lexical_cast<short>(coords[0]) - m_faceStartCount);
+            if (coords.size() > 1)
+            {
+                f.textureIndexes.push_back(boost::lexical_cast<short>(coords[1]) - m_faceStartCount);
+            }
+
             m_faces.push_back(f);
             //todo deal with texture coords
         }
     };
+
+    m_parseVertices = [this](Words& words)
+    {
+        Vertex v;
+        v.x = boost::lexical_cast<float>(words[0]);
+        v.y = boost::lexical_cast<float>(words[1]);
+        v.z = boost::lexical_cast<float>(words[2]);
+        m_indexedVertices.push_back(v);
+    };
+
+    m_parseTextureVertices = [this](Words& words)
+    {
+        TextureVertex vt;
+        vt.u = boost::lexical_cast<float>(words[0]);
+        vt.v = boost::lexical_cast<float>(words[1]);
+        m_indexedTextureVert.push_back(vt);
+    };
+
     std::pair<std::string, ParsingFunction> vertex("v", m_parseVertices);
-    std::pair<std::string, ParsingFunction> face("f", m_parseFaces);
+    std::pair<std::string, ParsingFunction> faces("f", m_parseFaces);
+    std::pair<std::string, ParsingFunction> texture("vt", m_parseTextureVertices);
     m_parseFunctions.insert(vertex);
-    m_parseFunctions.insert(face);
+    m_parseFunctions.insert(faces);
+    m_parseFunctions.insert(texture);
 }
 
 ObjectFileParser::ObjectFileParser() :
@@ -55,13 +77,13 @@ m_faceStartCount(1)
     CreateFunctions();
 }
 
-const void ObjectFileParser::ParseObjFile(const std::string& p_filePath, std::vector<SceneObjectPtr>* p_sceneObjects)
+void ObjectFileParser::ParseObjFile(const std::string& p_filePath, std::vector<SceneObjectPtr>& p_sceneObjects)
 {
     std::cout << "reading file \n";
     std::ifstream file(p_filePath);
     std::string line;
-    SceneObjectPtr currentObject = nullptr;
     Words words;
+    SceneObjectPtr currentObject;
     while (std::getline(file, line))
     {
         boost::split(words, line, boost::is_any_of(" "));
@@ -69,16 +91,17 @@ const void ObjectFileParser::ParseObjFile(const std::string& p_filePath, std::ve
         {
             if (currentObject == nullptr)
             {
-                currentObject = m_parseName(line);
+                currentObject = m_parseName(words);
             }
             else
             {
-                currentObject->SetRenderComponent(CreateRenderComponent());
-                p_sceneObjects->push_back(currentObject);
-                currentObject = m_parseName(line);
+                m_faceStartCount = m_indexedVertices.size();
+                RenderComponentPtr currentComponent = CreateRenderComponent();
+                currentObject->SetRenderComponent(currentComponent);
+                p_sceneObjects.push_back(currentObject);
+                currentObject = m_parseName(words);
             }
         }
-
         else
         {
             if (m_parseFunctions.count(words[0]) > 0)
@@ -90,10 +113,11 @@ const void ObjectFileParser::ParseObjFile(const std::string& p_filePath, std::ve
         }
     }
 
-    if (currentObject != nullptr)
+    if (currentObject != NULL)
     {
-        currentObject->SetRenderComponent(CreateRenderComponent());
-        p_sceneObjects->push_back(currentObject);
+        RenderComponentPtr currentComponent = CreateRenderComponent();
+        currentObject->SetRenderComponent(currentComponent);
+        p_sceneObjects.push_back(currentObject);
     }
 }
 
@@ -101,12 +125,20 @@ RenderComponentPtr ObjectFileParser::CreateRenderComponent()
 {
     m_faceStartCount += m_indexedVertices.size();
     std::vector<Vertex> vertices;
+    std::vector<TextureVertex> texCoords;
     for (Face face : m_faces)
     {
-        Vertex v = m_indexedVertices.at(face.vertexIndex);
-        vertices.push_back(v);
+        for (GLshort index : face.vertexIndexes)
+        {
+            vertices.push_back(m_indexedVertices.at(index));
+        }
+        for (GLshort index1 : face.textureIndexes)
+        {
+            texCoords.push_back(m_indexedTextureVert.at(index1);
+        }
     }
     m_indexedVertices.clear();
+    m_indexedTextureVert.clear();
     m_faces.clear();
-    return RenderComponentPtr(new RenderComponent(vertices));
+    return RenderComponentPtr(new RenderComponent(vertices, texCoords));
 }

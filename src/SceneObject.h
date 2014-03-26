@@ -8,11 +8,10 @@
 class SceneObject
 {
 public:
+    SceneObject(const std::string& p_name);
     void SetRenderComponent(RenderComponentPtr p_renderComponent);
 
     void Render();
-
-    void SetName(std::string p_name);
 
 private:
     RenderComponentPtr m_renderComponent;

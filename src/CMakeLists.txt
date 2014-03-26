@@ -1,6 +1,13 @@
-cmake_minimum_required(VERSION 2.8.7)
+cmake_minimum_required(VERSION 2.8.12)
 project(opengl-exercise)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+
+if(WIN32)
+set(CMAKE_CXX_FLAGS "/Wall ${CMAKE_CXX_FLAGS}")
+endif(WIN32)
+if(!WIN32)
+set(CMAKE_CXX_FLAGS "-Werror -Wall -std=c++11 ${CMAKE_CXX_FLAGS}")
+endif(!WIN32)
 
 find_package(OpenGL REQUIRED)
 find_package(GLM REQUIRED)
@@ -8,6 +15,8 @@ find_package(GLM REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(Boost REQUIRED)
 find_package(GLFW REQUIRED)
+find_package(GLI REQUIRED)
+
 if(APPLE)
 SET(CMAKE_CXX_FLAGS "-std=c++11")
     set(CMAKE_FIND_FRAMEWORK ONLY)
@@ -45,10 +54,11 @@ MainTypes.h)
 
 
 
-add_executable(opengl-exercise ${MAIN_SRC})
+add_executable(opengl-exercise ${MAIN_SRC} ${MAIN_H})
 
 target_link_libraries(opengl-exercise graphics)
 target_link_libraries(opengl-exercise tools)
+
 
 target_link_libraries(opengl-exercise ${GLFW_LIBRARIES})
 target_link_libraries(opengl-exercise ${GLEW_LIBRARY})

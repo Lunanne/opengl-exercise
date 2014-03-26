@@ -11,7 +11,6 @@
 #include <iostream>
 #include <algorithm>
 
-
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
@@ -33,7 +32,7 @@ const GLchar* readFile(const char* p_fileName)
     if (file)
     {
         file.seekg(0, std::ios::end);
-        const int length = file.tellg();
+        const int length = static_cast<int>(file.tellg());
         content = new char[length + 1];
         file.seekg(0, std::ios::beg);
         file.read(content, length);
@@ -48,13 +47,14 @@ const GLchar* readFile(const char* p_fileName)
     return "";
 }
 
-RenderComponent::RenderComponent(std::vector<Vertex> p_vertices) :
-m_vertexDataChanged(false),
-m_verticesCoords(p_vertices)
+RenderComponent::RenderComponent(std::vector<Vertex> p_vertices, std::vector<TextureVertex> p_textureVertices) :
+m_vertexDataChanged(true),
+m_vertices(p_vertices),
+m_textureVertices(p_textureVertices)
 {
     CreateVAO();
     CreateShaders();
-    glm::mat4 projectionMatrix = glm::perspective(60.0f, 4.0f / 3.0f, 0.01f, 200.0f);
+    glm::mat4 projectionMatrix = glm::perspective(60.0f, 4.0f / 3.0f, 0.1f, 100.0f);
     glm::mat4 viewMatrix = glm::lookAt(glm::vec3(4, 3, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
     glm::mat4 modelMatrix = glm::mat4(1.0f);
     m_mvpMatrix = projectionMatrix * viewMatrix * modelMatrix;
@@ -68,54 +68,47 @@ RenderComponent::~RenderComponent()
 
 void RenderComponent::CreateVAO()
 {
-  
     glGenVertexArrays(1, &m_vaoID);
     GLenum errCode;
     const GLubyte *errString;
-    
+
     if ((errCode = glGetError()) != GL_NO_ERROR) {
         errString = gluErrorString(errCode);
         fprintf(stderr, "OpenGL Error in RenderComponent: %s\n", errString);
     }
     glBindVertexArray(m_vaoID);
-    
+
     glGenBuffers(1, &m_vboID);
     glBindBuffer(GL_ARRAY_BUFFER, m_vboID);
 
-    glBufferData(GL_ARRAY_BUFFER, m_verticesCoords.size() * 3 * sizeof(GLfloat), m_verticesCoords.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * 3 * sizeof(GLfloat), m_vertices.data(), GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-    
+
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
     m_vertexDataChanged = false;
 }
 void RenderComponent::DestroyVAO()
 {
-    glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    glDeleteBuffers(1, &m_vboID);
-
-    glBindVertexArray(0);
     glDeleteVertexArrays(1, &m_vaoID);
+
+    m_vertices.clear();
 }
 void RenderComponent::Render()
 {
     glDisable(GL_CULL_FACE);
 
     //CreateVAO();
-    glUseProgram(m_programID);
 
     glUniformMatrix4fv(m_matrixID, 1, GL_FALSE, &m_mvpMatrix[0][0]);
+    glUseProgram(m_programID);
 
     glBindVertexArray(m_vaoID);
-    
-    glDrawArrays(GL_POINTS, 0, m_verticesCoords.size());
+
+    glDrawArrays(GL_POINTS, 0, m_vertices.size());
 
     glBindVertexArray(0);
- 
 }
 
 void RenderComponent::CreateShaders()
@@ -185,5 +178,5 @@ void RenderComponent::DestroyShaders()
 
 const int RenderComponent::GetVertexCount() const
 {
-    return m_verticesCoords.size();
+    return m_vertices.size();
 }

@@ -22,14 +22,15 @@
 class RenderComponent
 {
 public:
-    RenderComponent(std::vector<Vertex> p_vertices);
+    RenderComponent(std::vector<Vertex> p_vertices, std::vector<TextureVertex> p_textureVertices);
     ~RenderComponent();
     void Render();
     const int GetVertexCount() const;
 
 private:
-    GLuint                     m_vboID;
     GLuint                     m_vaoID;
+    GLuint                     m_vboID;
+    GLuint                     m_texvaoID;
     GLuint                     m_matrixID;
     GLuint                     m_programID;
     GLuint                     m_vertexShaderID;
@@ -37,8 +38,9 @@ private:
     const GLchar*              m_vertexShader;
     const GLchar*              m_fragmentShader;
     glm::mat4                  m_mvpMatrix;
-    std::vector<Vertex>        m_verticesCoords;
     bool                       m_vertexDataChanged;
+    std::vector<Vertex>        m_vertices; //vertices in the right order to render(unindexed).
+    std::vector<TextureVertex>        m_textureVertices; //vertices in the right order to render(unindexed).
 
     void CreateVAO();
     void DestroyVAO();

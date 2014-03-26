@@ -1,4 +1,5 @@
 include_directories(${OPENGL_INCLUDE_DIR})
+include_directories(${GLI_INCLUDE_DIR})
 include_directories("..")
 
  set(GRAPHICS_SRC

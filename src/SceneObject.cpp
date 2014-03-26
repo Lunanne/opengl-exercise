@@ -4,7 +4,7 @@
 
 #include "SceneObject.h"
 
-void SceneObject::SetName(std::string p_name)
+SceneObject::SceneObject(const std::string& p_name)
 {
     m_name = p_name;
 }
