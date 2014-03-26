@@ -134,7 +134,7 @@ RenderComponentPtr ObjectFileParser::CreateRenderComponent()
         }
         for (GLshort index1 : face.textureIndexes)
         {
-            texCoords.push_back(m_indexedTextureVert.at(index1);
+            texCoords.push_back(m_indexedTextureVert.at(index1));
         }
     }
     m_indexedVertices.clear();
