@@ -59,20 +59,28 @@ void ObjectFileParser::CreateFunctions()
     {
         TextureVertex vt;
         vt.u = boost::lexical_cast<float>(words[0]);
-        vt.v = boost::lexical_cast<float>(words[1]);
+        vt.v = 1 - boost::lexical_cast<float>(words[1]);
         m_indexedTextureVert.push_back(vt);
+    };
+
+    m_parseMaterialName = [this](Words& words)
+    {
+        m_materialName = words[0];
     };
 
     std::pair<std::string, ParsingFunction> vertex("v", m_parseVertices);
     std::pair<std::string, ParsingFunction> faces("f", m_parseFaces);
     std::pair<std::string, ParsingFunction> texture("vt", m_parseTextureVertices);
+    std::pair<std::string, ParsingFunction> name("usemtl", m_parseMaterialName);
     m_parseFunctions.insert(vertex);
     m_parseFunctions.insert(faces);
     m_parseFunctions.insert(texture);
+    m_parseFunctions.insert(name);
 }
 
 ObjectFileParser::ObjectFileParser() :
-m_faceStartCount(1)
+m_faceStartCount(1),
+m_materialParser()
 {
     CreateFunctions();
 }
@@ -84,6 +92,7 @@ void ObjectFileParser::ParseObjFile(const std::string& p_filePath, std::vector<S
     std::string line;
     Words words;
     SceneObjectPtr currentObject;
+    std::unordered_map<std::string, MaterialPtr> materials;
     while (std::getline(file, line))
     {
         boost::split(words, line, boost::is_any_of(" "));
@@ -102,6 +111,12 @@ void ObjectFileParser::ParseObjFile(const std::string& p_filePath, std::vector<S
                 currentObject = m_parseName(words);
             }
         }
+        else if (words[0].compare("mtllib") == 0)
+        {
+            words.erase(words.begin());
+            m_materialParser.ParseMtlFile(words[0], materials);
+        }
+
         else
         {
             if (m_parseFunctions.count(words[0]) > 0)
@@ -118,6 +133,14 @@ void ObjectFileParser::ParseObjFile(const std::string& p_filePath, std::vector<S
         RenderComponentPtr currentComponent = CreateRenderComponent();
         currentObject->SetRenderComponent(currentComponent);
         p_sceneObjects.push_back(currentObject);
+    }
+
+    for (SceneObjectPtr object : p_sceneObjects)
+    {
+        if (materials.count(object->GetMaterialName()) > 0)
+        {
+            object->SetMaterial(materials[object->GetMaterialName()]);
+        }
     }
 }
 
@@ -140,5 +163,5 @@ RenderComponentPtr ObjectFileParser::CreateRenderComponent()
     m_indexedVertices.clear();
     m_indexedTextureVert.clear();
     m_faces.clear();
-    return RenderComponentPtr(new RenderComponent(vertices, texCoords));
+    return RenderComponentPtr(new RenderComponent(vertices, texCoords, m_materialName));
 }

@@ -5,3 +5,6 @@
 */*.user*
 */*.kdev4
 /build1*
+*.dll
+*.blend
+*.blend1

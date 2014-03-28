@@ -1,8 +1,10 @@
 set(TOOLS_H
-objectfileparser.h)
+objectfileparser.h
+materialfileparser.h)
 
 set(TOOLS_SRC
-objectfileparser.cpp)
+objectfileparser.cpp
+materialfileparser.cpp)
 
 add_library(tools ${TOOLS_H} ${TOOLS_SRC})
 target_link_libraries(tools graphics)

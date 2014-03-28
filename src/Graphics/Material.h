@@ -4,12 +4,12 @@
 #include <string>
 
 #include <GLFW\glfw3.h>
-#include <gli\gli.hpp>
 #include "GraphicsTypes.h"
 
 class Material
 {
 public:
+    ~Material();
     void SetDiffuseColour(Colour p_colour);
     void SetDiffuseTexture(const std::string& p_fileName);
     void SetName(const std::string& p_name);
@@ -19,7 +19,7 @@ public:
 private:
     std::string m_name;
     Colour m_difColour;
-    gli::texture2D m_texture;
     GLuint m_textureID;
+    unsigned char* m_image;
 };
 #endif

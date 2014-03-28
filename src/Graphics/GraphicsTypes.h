@@ -35,4 +35,5 @@ struct Colour
 };
 
 typedef std::shared_ptr<RenderComponent> RenderComponentPtr;
+typedef std::shared_ptr<Material>     MaterialPtr;
 #endif

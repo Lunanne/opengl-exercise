@@ -21,3 +21,13 @@ void SceneObject::SetRenderComponent(RenderComponentPtr p_renderComponent)
 {
     m_renderComponent = p_renderComponent;
 }
+
+const std::string& SceneObject::GetMaterialName()
+{
+    return m_renderComponent->GetMaterialName();
+}
+
+void SceneObject::SetMaterial(MaterialPtr p_material)
+{
+    m_renderComponent->SetMaterial(p_material);
+}

@@ -15,7 +15,7 @@ find_package(GLM REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(Boost REQUIRED)
 find_package(GLFW REQUIRED)
-find_package(GLI REQUIRED)
+find_package(SOIL REQUIRED)
 
 if(APPLE)
 SET(CMAKE_CXX_FLAGS "-std=c++11")
@@ -63,7 +63,7 @@ target_link_libraries(opengl-exercise tools)
 target_link_libraries(opengl-exercise ${GLFW_LIBRARIES})
 target_link_libraries(opengl-exercise ${GLEW_LIBRARY})
 target_link_libraries(opengl-exercise ${Boost_LIBRARIES})
-
+target_link_libraries(opengl-exercise ${SOIL_LIBRARIES})
 
 target_link_libraries(opengl-exercise ${OPENGL_LIBRARIES})
 if(APPLE)

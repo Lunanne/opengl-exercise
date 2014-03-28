@@ -1,5 +1,6 @@
 #ifndef __APPLE__
 #include <GL/glew.h>
+#include <GL/GL.h>
 #endif
 
 #ifdef __APPLE__
@@ -17,13 +18,6 @@
 #include "../Tools/objectfileparser.h"
 
 #include "RenderComponent.h"
-
-/*
-#ifdef __APPLE__
-#define glBindVertexArray		glBindVertexArrayAPPLE
-#define glDeleteVertexArrays	glDeleteVertexArraysAPPLE
-#define glGenVertexArrays  	glGenVertexArraysA
-#endif*/
 
 const GLchar* readFile(const char* p_fileName)
 {
@@ -47,18 +41,20 @@ const GLchar* readFile(const char* p_fileName)
     return "";
 }
 
-RenderComponent::RenderComponent(std::vector<Vertex> p_vertices, std::vector<TextureVertex> p_textureVertices) :
+RenderComponent::RenderComponent(std::vector<Vertex> p_vertices, std::vector<TextureVertex> p_textureVertices, const std::string& p_materialName) :
 m_vertexDataChanged(true),
 m_vertices(p_vertices),
-m_textureVertices(p_textureVertices)
+m_textureVertices(p_textureVertices),
+m_materialName(p_materialName)
 {
-    CreateVAO();
     CreateShaders();
+    CreateVAO();
     glm::mat4 projectionMatrix = glm::perspective(60.0f, 4.0f / 3.0f, 0.1f, 100.0f);
     glm::mat4 viewMatrix = glm::lookAt(glm::vec3(4, 3, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
     glm::mat4 modelMatrix = glm::mat4(1.0f);
     m_mvpMatrix = projectionMatrix * viewMatrix * modelMatrix;
     m_matrixID = glGetUniformLocation(m_programID, "MVP");
+    m_texSamplerLoc = glGetUniformLocation(m_programID, "texSampler");
 }
 RenderComponent::~RenderComponent()
 {
@@ -68,21 +64,23 @@ RenderComponent::~RenderComponent()
 
 void RenderComponent::CreateVAO()
 {
-    glGenVertexArrays(1, &m_vaoID);
-    GLenum errCode;
-    const GLubyte *errString;
+    glGenVertexArrays(1, &m_vertexArrayID);
+    glBindVertexArray(m_vertexArrayID);
 
-    if ((errCode = glGetError()) != GL_NO_ERROR) {
-        errString = gluErrorString(errCode);
-        fprintf(stderr, "OpenGL Error in RenderComponent: %s\n", errString);
-    }
-    glBindVertexArray(m_vaoID);
-
-    glGenBuffers(1, &m_vboID);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vboID);
-
+    glGenBuffers(1, &m_vertexBufferID);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
     glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * 3 * sizeof(GLfloat), m_vertices.data(), GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    m_positionLoc = glGetAttribLocation(m_programID, "in_position");
+    glVertexAttribPointer(m_positionLoc, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glGenBuffers(1, &m_textureBufferID);
+    glBindBuffer(GL_ARRAY_BUFFER, m_textureBufferID);
+    glBufferData(GL_ARRAY_BUFFER, m_textureVertices.size() * 2 * sizeof(GLfloat), m_textureVertices.data(), GL_STATIC_DRAW);
+
+    m_textureCoordsLoc = glGetAttribLocation(m_programID, "in_texCoords");
+    glVertexAttribPointer(m_textureCoordsLoc, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
@@ -91,24 +89,33 @@ void RenderComponent::CreateVAO()
 void RenderComponent::DestroyVAO()
 {
     glDisableVertexAttribArray(0);
-    glDeleteVertexArrays(1, &m_vaoID);
+    glDeleteBuffers(1, &m_vertexBufferID);
+    glDeleteBuffers(1, &m_textureBufferID);
+
+    glDeleteVertexArrays(1, &m_vertexArrayID);
 
     m_vertices.clear();
 }
 void RenderComponent::Render()
 {
-    glDisable(GL_CULL_FACE);
-
+    glUseProgram(m_programID);
     //CreateVAO();
 
     glUniformMatrix4fv(m_matrixID, 1, GL_FALSE, &m_mvpMatrix[0][0]);
-    glUseProgram(m_programID);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, m_material->GetTextureID());
+    glUniform1i(m_texSamplerLoc, 0);
+    glBindVertexArray(m_vertexArrayID);
 
-    glBindVertexArray(m_vaoID);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
+    glEnableVertexAttribArray(m_positionLoc);
 
-    glDrawArrays(GL_POINTS, 0, m_vertices.size());
+    glBindBuffer(GL_ARRAY_BUFFER, m_textureBufferID);
+    glEnableVertexAttribArray(m_textureCoordsLoc);
 
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, m_vertices.size());
     glBindVertexArray(0);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void RenderComponent::CreateShaders()
@@ -179,4 +186,14 @@ void RenderComponent::DestroyShaders()
 const int RenderComponent::GetVertexCount() const
 {
     return m_vertices.size();
+}
+
+const std::string& RenderComponent::GetMaterialName() const
+{
+    return m_materialName;
+}
+
+void RenderComponent::SetMaterial(MaterialPtr p_material)
+{
+    m_material = p_material;
 }
