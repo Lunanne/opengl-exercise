@@ -74,14 +74,16 @@ void RenderComponent::CreateVAO()
     glVertexAttribPointer(m_positionLoc, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    glGenBuffers(1, &m_textureBufferID);
-    glBindBuffer(GL_ARRAY_BUFFER, m_textureBufferID);
-    glBufferData(GL_ARRAY_BUFFER, m_textureVertices.size() * 2 * sizeof(GLfloat), m_textureVertices.data(), GL_STATIC_DRAW);
+    if (m_textureVertices.empty() == false)
+    {
+        glGenBuffers(1, &m_textureBufferID);
+        glBindBuffer(GL_ARRAY_BUFFER, m_textureBufferID);
+        glBufferData(GL_ARRAY_BUFFER, m_textureVertices.size() * 2 * sizeof(GLfloat), m_textureVertices.data(), GL_STATIC_DRAW);
 
-    m_textureCoordsLoc = glGetAttribLocation(m_programID, "in_texCoords");
-    glVertexAttribPointer(m_textureCoordsLoc, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
+        m_textureCoordsLoc = glGetAttribLocation(m_programID, "in_texCoords");
+        glVertexAttribPointer(m_textureCoordsLoc, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
     m_vertexDataChanged = false;
@@ -90,8 +92,8 @@ void RenderComponent::DestroyVAO()
 {
     glDisableVertexAttribArray(0);
     glDeleteBuffers(1, &m_vertexBufferID);
-    glDeleteBuffers(1, &m_textureBufferID);
-
+    if (m_textureVertices.empty() == false)
+        glDeleteBuffers(1, &m_textureBufferID);
     glDeleteVertexArrays(1, &m_vertexArrayID);
 
     m_vertices.clear();
@@ -102,16 +104,21 @@ void RenderComponent::Render()
     //CreateVAO();
 
     glUniformMatrix4fv(m_matrixID, 1, GL_FALSE, &m_mvpMatrix[0][0]);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_material->GetTextureID());
-    glUniform1i(m_texSamplerLoc, 0);
+
     glBindVertexArray(m_vertexArrayID);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
     glEnableVertexAttribArray(m_positionLoc);
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_textureBufferID);
-    glEnableVertexAttribArray(m_textureCoordsLoc);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, m_material->GetTextureID());
+    glUniform1i(m_texSamplerLoc, 0);
+
+    if (m_textureVertices.empty() == false)
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, m_textureBufferID);
+        glEnableVertexAttribArray(m_textureCoordsLoc);
+    }
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, m_vertices.size());
     glBindVertexArray(0);

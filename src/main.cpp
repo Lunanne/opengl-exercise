@@ -72,7 +72,7 @@ int	main(int argc, char **argv)
     Graphics graphics;
     graphics.InitializeGL();
 
-    Scene scene("./Resources/cube-textured.obj");
+    Scene scene("./Resources/scene1.obj");
 
     while (!glfwWindowShouldClose(window))
     {

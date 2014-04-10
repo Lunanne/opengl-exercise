@@ -9,12 +9,13 @@
 class Material
 {
 public:
+    Material();
     ~Material();
     void SetDiffuseColour(Colour p_colour);
     void SetDiffuseTexture(const std::string& p_fileName);
     void SetName(const std::string& p_name);
     const std::string& GetName() const;
-    const GLuint GetTextureID() const;
+    const GLuint GetTextureID();
 
 private:
     std::string m_name;

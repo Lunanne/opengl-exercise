@@ -14,7 +14,14 @@ Material::~Material()
 {
     glDeleteTextures(1, &m_textureID);
 
-    SOIL_free_image_data(m_image);
+    if (m_image != NULL)
+        SOIL_free_image_data(m_image);
+}
+
+Material::Material() :
+m_image(NULL),
+m_difColour(Colour())
+{
 }
 
 void Material::SetDiffuseColour(Colour p_colour)
@@ -46,7 +53,11 @@ const std::string& Material::GetName() const
     return m_name;
 }
 
-const GLuint Material::GetTextureID() const
+const GLuint Material::GetTextureID()
 {
+    if (m_image == NULL)
+    {
+        SetDiffuseTexture("white.png");
+    }
     return m_textureID;
 }

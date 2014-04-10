@@ -31,14 +31,14 @@ void ObjectFileParser::CreateFunctions()
     m_parseFaces = [this](Words& words)
     {
         std::vector<std::string> coords;
+        Face f;
         for (std::string word : words)
         {
-            boost::split(coords, word, boost::is_any_of("/"));
-            Face f;
+            boost::split(coords, word, boost::is_any_of("/"));            
             f.vertexIndexes.push_back(boost::lexical_cast<short>(coords[0]) - m_faceStartCount);
             if (coords.size() > 1)
             {
-                f.textureIndexes.push_back(boost::lexical_cast<short>(coords[1]) - m_faceStartCount);
+                f.textureIndexes.push_back(boost::lexical_cast<short>(coords[1]) - 1);
             }
 
             m_faces.push_back(f);
@@ -104,7 +104,6 @@ void ObjectFileParser::ParseObjFile(const std::string& p_filePath, std::vector<S
             }
             else
             {
-                m_faceStartCount = m_indexedVertices.size();
                 RenderComponentPtr currentComponent = CreateRenderComponent();
                 currentObject->SetRenderComponent(currentComponent);
                 p_sceneObjects.push_back(currentObject);
@@ -153,11 +152,13 @@ RenderComponentPtr ObjectFileParser::CreateRenderComponent()
     {
         for (GLshort index : face.vertexIndexes)
         {
-            vertices.push_back(m_indexedVertices.at(index));
+            if (index < m_indexedVertices.size())
+                vertices.push_back(m_indexedVertices.at(index));
         }
         for (GLshort index1 : face.textureIndexes)
         {
-            texCoords.push_back(m_indexedTextureVert.at(index1));
+            if (index1 < m_indexedTextureVert.size())
+                texCoords.push_back(m_indexedTextureVert.at(index1));
         }
     }
     m_indexedVertices.clear();
