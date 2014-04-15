@@ -5,8 +5,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include "Graphics\Material.h"
-
 typedef std::vector<std::string> Words;
 typedef std::function<void(Words&)> ParsingFunction;
 

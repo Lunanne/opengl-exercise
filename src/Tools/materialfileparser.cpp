@@ -4,7 +4,9 @@
 #include <fstream>
 #include <unordered_map>
 
-#include "Graphics\GraphicsTypes.h"
+#include "../Graphics/GraphicsTypes.h"
+#include "../Graphics/Material.h"
+
 #include "materialfileparser.h"
 
 void MaterialFileParser::CreateFunctions()

@@ -34,6 +34,14 @@ struct Colour
     float b;
 };
 
+struct Image
+{
+    int width;
+    int height;
+    int bitDepth;
+    int format;
+    unsigned char* data;
+};
 typedef std::shared_ptr<RenderComponent> RenderComponentPtr;
 typedef std::shared_ptr<Material>     MaterialPtr;
 #endif

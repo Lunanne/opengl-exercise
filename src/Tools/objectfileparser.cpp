@@ -6,9 +6,10 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
 
-#include <SceneObject.h>
-#include <MainTypes.h>
-#include <Graphics/RenderComponent.h>
+#include "../MainTypes.h"
+#include "../SceneObject.h"
+#include "../Graphics/GraphicsTypes.h"
+#include "../Graphics/RenderComponent.h"
 
 #include "objectfileparser.h"
 
@@ -16,6 +17,7 @@ void ObjectFileParser::CreateFunctions()
 {
     m_parseName = [](Words& words)
     {
+        words.erase((words.begin()));
         return SceneObjectPtr(new SceneObject(words[0]));
     };
 
@@ -40,10 +42,9 @@ void ObjectFileParser::CreateFunctions()
             {
                 f.textureIndexes.push_back(boost::lexical_cast<short>(coords[1]) - 1);
             }
-
-            m_faces.push_back(f);
             //todo deal with texture coords
         }
+        m_faces.push_back(f);
     };
 
     m_parseVertices = [this](Words& words)
@@ -150,12 +151,12 @@ RenderComponentPtr ObjectFileParser::CreateRenderComponent()
     std::vector<TextureVertex> texCoords;
     for (Face face : m_faces)
     {
-        for (GLshort index : face.vertexIndexes)
+        for (short index : face.vertexIndexes)
         {
             if (index < m_indexedVertices.size())
                 vertices.push_back(m_indexedVertices.at(index));
         }
-        for (GLshort index1 : face.textureIndexes)
+        for (short index1 : face.textureIndexes)
         {
             if (index1 < m_indexedTextureVert.size())
                 texCoords.push_back(m_indexedTextureVert.at(index1));

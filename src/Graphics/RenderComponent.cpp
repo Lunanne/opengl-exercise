@@ -8,38 +8,17 @@
 #include <OpenGL/glu.h>
 #endif
 
-#include <fstream>
-#include <iostream>
 #include <algorithm>
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
 #include "../Tools/objectfileparser.h"
+#include "../Tools/FileReader.h"
 
+#include "Material.h"
 #include "RenderComponent.h"
 
-const GLchar* readFile(const char* p_fileName)
-{
-    GLchar* content;
-    std::ifstream file(p_fileName, std::ios::in | std::ios::binary);
-    if (file)
-    {
-        file.seekg(0, std::ios::end);
-        const int length = static_cast<int>(file.tellg());
-        content = new char[length + 1];
-        file.seekg(0, std::ios::beg);
-        file.read(content, length);
-        content[length] = '\0';
-
-        return content;
-    }
-    else
-    {
-        std::printf("Can't open file at %s \n", p_fileName);
-    }
-    return "";
-}
 
 RenderComponent::RenderComponent(std::vector<Vertex> p_vertices, std::vector<TextureVertex> p_textureVertices, const std::string& p_materialName) :
 m_vertexDataChanged(true),
@@ -119,6 +98,20 @@ void RenderComponent::Render()
         glBindBuffer(GL_ARRAY_BUFFER, m_textureBufferID);
         glEnableVertexAttribArray(m_textureCoordsLoc);
     }
+    else
+    {
+        TextureVertex tv;
+        tv.u = 0;
+        tv.v = 0;
+        m_textureVertices.push_back(tv);
+        glGenBuffers(1, &m_textureBufferID);
+        glBindBuffer(GL_ARRAY_BUFFER, m_textureBufferID);
+        glBufferData(GL_ARRAY_BUFFER, m_textureVertices.size() * 2 * sizeof(GLfloat), m_textureVertices.data(), GL_STATIC_DRAW);
+        
+        m_textureCoordsLoc = glGetAttribLocation(m_programID, "in_texCoords");
+        glVertexAttribPointer(m_textureCoordsLoc, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+    }
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, m_vertices.size());
     glBindVertexArray(0);
@@ -130,8 +123,8 @@ void RenderComponent::CreateShaders()
     GLint result = GL_FALSE;
     int infoLogLength;
 
-    m_vertexShader = readFile("./Resources/vertexShader.vert");
-    m_fragmentShader = readFile("./Resources/fragmentShader.frag");
+    m_vertexShader = FileReader::ReadFile("./Resources/vertexShader.vert");
+    m_fragmentShader = FileReader::ReadFile("./Resources/fragmentShader.frag");
 
     m_vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(m_vertexShaderID, 1, const_cast<const GLchar**>(&m_vertexShader), NULL);

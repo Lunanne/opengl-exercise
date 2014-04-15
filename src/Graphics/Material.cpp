@@ -7,21 +7,23 @@
 #include <GL/glu.h>
 #endif
 
-#include <SOIL.h>
+#include <stdlib.h>
+#include "../Tools/FileReader.h"
 #include "Material.h"
 
 Material::~Material()
 {
     glDeleteTextures(1, &m_textureID);
 
-    if (m_image != NULL)
-        SOIL_free_image_data(m_image);
+    if (m_image.data != NULL)
+        free(m_image.data);
 }
 
 Material::Material() :
-m_image(NULL),
-m_difColour(Colour())
+m_difColour(Colour()),
+m_image()
 {
+    m_image.data = NULL;
 }
 
 void Material::SetDiffuseColour(Colour p_colour)
@@ -32,13 +34,10 @@ void Material::SetDiffuseColour(Colour p_colour)
 void Material::SetDiffuseTexture(const std::string& p_fileName)
 {
     std::string filePath = "./Resources/" + p_fileName;
-    int width;
-    int height;
-    int channels;
-    m_image = SOIL_load_image(filePath.c_str(), &width, &height, &channels, SOIL_LOAD_AUTO);
+    m_image = FileReader::ReadPNG(filePath.c_str());
     glGenTextures(1, &m_textureID);
     glBindTexture(GL_TEXTURE_2D, m_textureID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_image);
+    glTexImage2D(GL_TEXTURE_2D, 0, m_image.format, m_image.width, m_image.height, 0, m_image.format, GL_UNSIGNED_BYTE, m_image.data);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
@@ -55,7 +54,7 @@ const std::string& Material::GetName() const
 
 const GLuint Material::GetTextureID()
 {
-    if (m_image == NULL)
+    if (m_image.data == NULL)
     {
         SetDiffuseTexture("white.png");
     }

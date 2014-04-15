@@ -15,7 +15,7 @@ find_package(GLM REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(Boost REQUIRED)
 find_package(GLFW REQUIRED)
-find_package(SOIL REQUIRED)
+find_package(PNG REQUIRED)
 
 if(APPLE)
 SET(CMAKE_CXX_FLAGS "-std=c++11")
@@ -36,10 +36,11 @@ include_directories(${GLEW_INCLUDE_DIR})
 include_directories(${OPENGL_INCLUDE_DIRS})
 include_directories(${GLM_INCLUDE_DIRS})
 
+include_directories(${PNG_INCLUDE_DIRS})
+
 add_subdirectory(Tools)
 add_subdirectory(Graphics)
 
-include_directories(Graphics)
 
 
 set(MAIN_SRC
@@ -63,12 +64,13 @@ target_link_libraries(opengl-exercise tools)
 target_link_libraries(opengl-exercise ${GLFW_LIBRARIES})
 target_link_libraries(opengl-exercise ${GLEW_LIBRARY})
 target_link_libraries(opengl-exercise ${Boost_LIBRARIES})
-target_link_libraries(opengl-exercise ${SOIL_LIBRARIES})
+target_link_libraries(opengl-exercise ${PNG_LIBRARIES})
 
 target_link_libraries(opengl-exercise ${OPENGL_LIBRARIES})
 if(APPLE)
 target_link_libraries(opengl-exercise ${GLFW_LIBRARY})
+    target_link_libraries(opengl-exercise ${COCOA_LIBRARIES})
+    target_link_libraries(opengl-exercise ${COCOA_LIBRARY})
     target_link_libraries(opengl-exercise ${CoreVideo_LIBRARIES})
     target_link_libraries(opengl-exercise ${IOKit_LIBRARIES})
-    target_link_libraries(opengl-exercise ${COCOA_LIBRARIES})
 endif (APPLE)

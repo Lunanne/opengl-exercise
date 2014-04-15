@@ -33,7 +33,6 @@ private:
     GLuint                     m_vertexArrayID;
     GLuint                     m_vertexBufferID;
     GLuint                     m_textureBufferID;
-    GLuint                     m_texvaoID;
     GLuint                     m_matrixID;
     GLuint                     m_programID;
     GLuint                     m_vertexShaderID;

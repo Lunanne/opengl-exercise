@@ -1,6 +1,7 @@
 include_directories(${OPENGL_INCLUDE_DIR})
 include_directories(${SOIL_INCLUDE_DIR})
 include_directories("..")
+include_directories("../Tools")
 
  set(GRAPHICS_SRC
  Graphics.cpp
@@ -11,7 +12,6 @@ include_directories("..")
  Graphics.h
  GraphicsTypes.h
  RenderComponent.h
- GraphicsTypes.h
  Material.h)
 
 

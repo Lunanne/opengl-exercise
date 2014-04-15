@@ -26,7 +26,7 @@ void Graphics::InitializeGL()
     glEnable(GL_TEXTURE_2D);
     glDisable(GL_LIGHTING);
     glEnable(GL_BLEND);
-    glClearColor(0, 0, 0, 0);
+    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 }
 
 void Graphics::PaintGL(GLFWwindow* p_window, const std::vector<SceneObjectPtr> p_sceneObjects)

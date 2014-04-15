@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include <GLFW\glfw3.h>
+#include <GLFW/glfw3.h>
 #include "GraphicsTypes.h"
 
 class Material
@@ -21,6 +21,6 @@ private:
     std::string m_name;
     Colour m_difColour;
     GLuint m_textureID;
-    unsigned char* m_image;
+    Image m_image;
 };
 #endif
