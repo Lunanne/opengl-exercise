@@ -22,9 +22,7 @@ void Graphics::InitializeGL()
     }
 
     glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
-    glEnable(GL_TEXTURE_2D);
-    glDisable(GL_LIGHTING);
+    glDepthFunc(GL_LEQUAL);
     glEnable(GL_BLEND);
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 }

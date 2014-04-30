@@ -60,7 +60,7 @@ void ObjectFileParser::CreateFunctions()
     {
         TextureVertex vt;
         vt.u = boost::lexical_cast<float>(words[0]);
-        vt.v = 1 - boost::lexical_cast<float>(words[1]);
+        vt.v = boost::lexical_cast<float>(words[1]);
         m_indexedTextureVert.push_back(vt);
     };
 
