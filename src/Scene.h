@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#include <assimp/scene.h>
 #include <GLFW/glfw3.h>
 
 #include "MainTypes.h"
@@ -15,6 +16,7 @@ public:
     const std::vector<SceneObjectPtr> GetSceneObjects() const;
 
 private:
+    void ConvertNodesToObjects(const aiNode* p_node, const aiScene& p_scene);
     std::vector<SceneObjectPtr> m_sceneObjects;
 };
 #endif

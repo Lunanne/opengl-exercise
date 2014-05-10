@@ -10,8 +10,12 @@
 #include <iostream>
 #include <fstream>
 
-#include <png.h>
 
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
+#include "stb_image.h"
 #include "../Graphics/GraphicsTypes.h"
 #include "FileReader.h"
 
@@ -40,58 +44,43 @@ char* FileReader::ReadFile(const char* p_fileName)
 Image FileReader::ReadPNG(const char* p_fileName)
 {
     Image image;
-
-    png_structp imagePtr;
-    png_infop infoPtr;
-
-    int bitDepth, colorType;
-    png_uint_32 height, width;
+    int width, height, channels;
     FILE* file = fopen(p_fileName, "rb");
-    imagePtr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-    infoPtr = png_create_info_struct(imagePtr);
-
-    if (setjmp(png_jmpbuf(imagePtr)))
-        std::printf("Error during png stuff");
-
-    png_init_io(imagePtr, file);
-    png_read_info(imagePtr, infoPtr);
-    png_get_IHDR(imagePtr, infoPtr, &width, &height, &bitDepth, &colorType, NULL, NULL, NULL);
-
-    if (bitDepth != 8)
-        std::printf("Error, unsupported bit depth");
-
-    image.width = width;
-    image.height = height;
-    image.bitDepth = bitDepth;
-    switch (colorType) {
-    case PNG_COLOR_TYPE_RGB:
-        image.format = GL_RGB;
-        break;
-    case PNG_COLOR_TYPE_RGB_ALPHA:
-        image.format = GL_RGBA;
-        break;
-    default:
-        std::printf("Error unsupported format %d \n", colorType);
-        break;
-    }
-
-    png_read_update_info(imagePtr, infoPtr);
-
-
-    int rowbytes = png_get_rowbytes(imagePtr, infoPtr);
-    rowbytes += 3 - ((rowbytes - 1) % 4);
-    size_t size = rowbytes * image.height * sizeof(png_byte*) +15;
-    image.data = static_cast<unsigned char*>(malloc(size));
-    png_byte** rowPtr = static_cast<png_byte**>(malloc(image.height * sizeof(png_byte *)));
-    //point rowPtr to correct offset in image data
-    for (int i = 0; i < image.height; ++i)
+    if (file)
     {
-        rowPtr[image.height - 1 - i] = image.data + i * rowbytes;
+        unsigned char* data = stbi_load_from_file(file, &width, &height, &channels, 0);
+        image.width = width;
+        image.height = height;
+        image.bitDepth = 8;
+        image.format = GL_RGBA;
+        image.data = new unsigned char[width * height * channels];
+        memcpy(image.data, data, sizeof(unsigned char)* width * height * channels);
+        stbi_image_free(data);
     }
-    png_set_interlace_handling(imagePtr);
-    png_read_image(imagePtr, rowPtr);
-    fclose(file);
-    png_destroy_read_struct(&imagePtr, &infoPtr, NULL);
-    free(rowPtr);
     return image;
+}
+
+const aiScene* FileReader::ReadScene(const std::string& p_filePath, Assimp::Importer& p_importer)
+{
+    const aiScene* scene = p_importer.ReadFile(p_filePath, aiProcess_Triangulate |
+        aiProcess_CalcTangentSpace |
+        aiProcess_GenSmoothNormals |
+        aiProcess_ValidateDataStructure |
+        aiProcess_RemoveRedundantMaterials |
+        aiProcess_FixInfacingNormals |
+        aiProcess_FindInvalidData |
+        aiProcess_OptimizeMeshes |
+        aiProcess_PreTransformVertices |
+        aiProcess_GenUVCoords |
+        aiProcess_TransformUVCoords);
+    
+    if (scene == NULL)
+    {
+        std::string error =  p_importer.GetErrorString();
+        std::printf("Assimp error : %s \n", error);
+        assert(scene != NULL);
+    }
+
+    return scene;
+
 }

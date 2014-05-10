@@ -20,11 +20,45 @@
 #include "RenderComponent.h"
 
 
-RenderComponent::RenderComponent(std::vector<Vertex> p_vertices, std::vector<TextureVertex> p_textureVertices, const std::string& p_materialName) :
+RenderComponent::RenderComponent(std::vector<Vertex> p_vertices, std::vector<TextureVertex> p_textureVertices, std::vector<Vertex> p_normalVertices) :
 m_vertexDataChanged(true),
 m_vertices(p_vertices),
 m_textureVertices(p_textureVertices),
-m_materialName(p_materialName)
+m_normalVertices(p_normalVertices)
+{
+    Init();
+}
+
+RenderComponent::RenderComponent(const aiMesh* p_mesh, const aiMaterial* p_aiMaterial)
+{
+    
+    for (unsigned int v = 0; v < p_mesh->mNumVertices; ++v)
+    {
+        const aiVector3D vert = p_mesh->mVertices[v];
+        m_vertices.push_back(Vertex(vert.x, vert.y, vert.z));
+        if (p_mesh->HasTextureCoords(0))
+        {
+            const aiVector3D textVert = p_mesh->mTextureCoords[0][v];
+            m_textureVertices.push_back(TextureVertex(textVert.x, textVert.y));
+        }
+        if (p_mesh->HasNormals())
+        {
+            const aiVector3D normal = p_mesh->mNormals[v];
+            m_normalVertices.push_back(Vertex(normal.x, normal.y, normal.z));
+        }
+    }
+
+    Init();
+
+    m_material = MaterialPtr(new Material(p_aiMaterial));
+}
+RenderComponent::~RenderComponent()
+{
+    DestroyVAO();
+    DestroyShaders();
+}
+
+void RenderComponent::Init()
 {
     CreateShaders();
     CreateVAO();
@@ -35,11 +69,7 @@ m_materialName(p_materialName)
     m_matrixID = glGetUniformLocation(m_programID, "MVP");
     m_texSamplerLoc = glGetUniformLocation(m_programID, "texSampler");
 }
-RenderComponent::~RenderComponent()
-{
-    DestroyVAO();
-    DestroyShaders();
-}
+
 
 void RenderComponent::CreateVAO()
 {
@@ -113,7 +143,7 @@ void RenderComponent::Render()
 
     }
 
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, m_vertices.size());
+    glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -186,11 +216,6 @@ void RenderComponent::DestroyShaders()
 const int RenderComponent::GetVertexCount() const
 {
     return m_vertices.size();
-}
-
-const std::string& RenderComponent::GetMaterialName() const
-{
-    return m_materialName;
 }
 
 void RenderComponent::SetMaterial(MaterialPtr p_material)

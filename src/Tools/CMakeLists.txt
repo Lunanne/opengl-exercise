@@ -1,13 +1,10 @@
 include_directories("../graphics")
-
+include_directories("../ThirdParty")
+include_directories(${ASSIMP_INCLUDE_DIRS})
 set(TOOLS_H
-objectfileparser.h
-materialfileparser.h
 FileReader.h)
 
 set(TOOLS_SRC
-objectfileparser.cpp
-materialfileparser.cpp
 FileReader.cpp)
 
 add_library(tools ${TOOLS_H} ${TOOLS_SRC})

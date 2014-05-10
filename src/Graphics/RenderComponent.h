@@ -22,11 +22,11 @@
 class RenderComponent
 {
 public:
-    RenderComponent(std::vector<Vertex> p_vertices, std::vector<TextureVertex> p_textureVertices, const std::string& p_materialName);
+    RenderComponent(std::vector<Vertex> p_vertices, std::vector<TextureVertex> p_textureVertices, std::vector<Vertex> p_normalVertices);
+    RenderComponent(const aiMesh* p_mesh, const aiMaterial* p_aiMaterial);
     ~RenderComponent();
     void Render();
     const int GetVertexCount() const;
-    const std::string& GetMaterialName() const;
     void SetMaterial(MaterialPtr p_material);
 
 private:
@@ -45,14 +45,16 @@ private:
     glm::mat4                  m_mvpMatrix;
     bool                       m_vertexDataChanged;
     std::vector<Vertex>        m_vertices; //vertices in the right order to render(unindexed).
+    std::vector<Vertex>        m_normalVertices; //normal vertices in right order.
     std::vector<TextureVertex> m_textureVertices; //vertices in the right order to render(unindexed).
-    std::string                m_materialName;
     MaterialPtr                m_material;
 
     void CreateVAO();
     void DestroyVAO();
     void CreateShaders();
     void DestroyShaders();
+
+    void Init();
 };
 
 #endif

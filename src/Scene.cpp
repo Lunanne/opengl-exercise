@@ -1,15 +1,21 @@
 #include <vector>
 #include <iostream>
 
-#include "Tools/objectfileparser.h"
+#include <assimp/scene.h>
+#include <assimp/Importer.hpp>
 
+#include "Tools/FileReader.h"
+#include "Graphics/RenderComponent.h"
+#include "Graphics/Material.h"
+#include "SceneObject.h"
 #include "Scene.h"
 
 Scene::Scene(const std::string& p_filePath)
 {
-    ObjectFileParser parser;
-    parser.ParseObjFile(p_filePath, m_sceneObjects);
-    std::cout << "Number of read objects : " << m_sceneObjects.size() << std::endl;
+    Assimp::Importer importer;
+    const aiScene* scene = FileReader::ReadScene(p_filePath, importer);
+    ConvertNodesToObjects(scene->mRootNode, *scene);
+
 }
 
 const std::vector<SceneObjectPtr> Scene::GetSceneObjects() const
@@ -20,4 +26,17 @@ const std::vector<SceneObjectPtr> Scene::GetSceneObjects() const
 Scene::~Scene()
 {
     m_sceneObjects.clear();
+}
+
+void Scene::ConvertNodesToObjects(const aiNode* p_node, const aiScene& p_scene)
+{
+    if (p_node->mNumMeshes > 0)
+    {
+        SceneObjectPtr object = SceneObjectPtr(new SceneObject(p_node, p_scene));        
+        m_sceneObjects.push_back(object);
+    }
+    for (unsigned int c = 0; c < p_node->mNumChildren; ++c)
+    {
+        ConvertNodesToObjects(p_node->mChildren[c], p_scene);
+    }
 }

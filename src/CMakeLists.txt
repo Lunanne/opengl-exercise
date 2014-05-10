@@ -13,9 +13,10 @@ find_package(OpenGL REQUIRED)
 find_package(GLM REQUIRED)
 #find_package(GLUT REQUIRED)
 find_package(GLEW REQUIRED)
-find_package(Boost REQUIRED)
+find_package(Boost 1.55 REQUIRED)
 find_package(GLFW REQUIRED)
 find_package(PNG REQUIRED)
+find_package(ASSIMP REQUIRED)
 
 if(APPLE)
 SET(CMAKE_CXX_FLAGS "-std=c++11")
@@ -46,12 +47,14 @@ add_subdirectory(Graphics)
 set(MAIN_SRC
 main.cpp
 Scene.cpp
-SceneObject.cpp)
+SceneObject.cpp
+ThirdParty/stb_image.c)
 
 set(MAIN_H
 Scene.h
 SceneObject.h
-MainTypes.h)
+MainTypes.h
+ThirdParty/stb_image.h)
 
 
 
@@ -65,6 +68,7 @@ target_link_libraries(opengl-exercise ${GLFW_LIBRARIES})
 target_link_libraries(opengl-exercise ${GLEW_LIBRARY})
 target_link_libraries(opengl-exercise ${Boost_LIBRARIES})
 target_link_libraries(opengl-exercise ${PNG_LIBRARIES})
+target_link_libraries(opengl-exercise ${ASSIMP_LIBRARIES})
 
 target_link_libraries(opengl-exercise ${OPENGL_LIBRARIES})
 if(APPLE)

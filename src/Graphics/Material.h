@@ -4,21 +4,22 @@
 #include <string>
 
 #include <GLFW/glfw3.h>
+#include <assimp/scene.h>
+
 #include "GraphicsTypes.h"
 
 class Material
 {
 public:
     Material();
+    Material(const aiMaterial* p_material);
+    Material(const Colour p_diffColour, const std::string& p_fileName);
     ~Material();
     void SetDiffuseColour(Colour p_colour);
     void SetDiffuseTexture(const std::string& p_fileName);
-    void SetName(const std::string& p_name);
-    const std::string& GetName() const;
     const GLuint GetTextureID();
 
 private:
-    std::string m_name;
     Colour m_difColour;
     GLuint m_textureID;
     Image m_image;

@@ -26,6 +26,25 @@ m_image()
     m_image.data = NULL;
 }
 
+
+Material::Material(const aiMaterial* p_material)
+{
+    aiString texturepath;
+    p_material->GetTexture(aiTextureType_DIFFUSE, 0, &texturepath);
+    aiColor4D diffColour(0.f, 0.f, 0.f, 0.f);
+    p_material->Get(AI_MATKEY_COLOR_DIFFUSE, diffColour);
+
+    SetDiffuseColour(Colour(diffColour.r, diffColour.g, diffColour.b, diffColour.a));
+    SetDiffuseTexture(texturepath.C_Str());
+}
+
+
+Material::Material(const Colour p_diffColour, const std::string& p_fileName):
+m_difColour(p_diffColour)
+{
+    SetDiffuseTexture(p_fileName);
+}
+
 void Material::SetDiffuseColour(Colour p_colour)
 {
     m_difColour = p_colour;
@@ -40,16 +59,6 @@ void Material::SetDiffuseTexture(const std::string& p_fileName)
     glTexImage2D(GL_TEXTURE_2D, 0, m_image.format, m_image.width, m_image.height, 0, m_image.format, GL_UNSIGNED_BYTE, m_image.data);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-}
-
-void Material::SetName(const std::string& p_name)
-{
-    m_name = p_name;
-}
-
-const std::string& Material::GetName() const
-{
-    return m_name;
 }
 
 const GLuint Material::GetTextureID()
