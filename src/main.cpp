@@ -21,6 +21,7 @@
 #include <thread>
 
 #include "Graphics/Graphics.h"
+#include "Graphics/ShaderManager.h"
 #include "Scene.h"
 
 static void error_callback(int error, const char* description)
@@ -72,6 +73,7 @@ int	main(int argc, char **argv)
     Graphics graphics;
     graphics.InitializeGL();
 
+    ShaderManager::Init();
     Scene scene("./Resources/cube.3ds");
 
     while (!glfwWindowShouldClose(window))
@@ -79,6 +81,9 @@ int	main(int argc, char **argv)
         graphics.PaintGL(window, scene.GetSceneObjects());
         glfwPollEvents();
     }
+    
+    ShaderManager::Clear();
+    
     glfwDestroyWindow(window);
     glfwTerminate();
 

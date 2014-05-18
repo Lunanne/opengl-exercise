@@ -35,14 +35,3 @@ void SceneObject::AddRenderComponent(RenderComponentPtr p_renderComponent)
 {
     m_renderComponents.push_back(p_renderComponent);
 }
-
-const std::string& SceneObject::GetMaterialName()
-{
-//    return m_renderComponent->GetMaterialName();
-    return "";
-}
-
-void SceneObject::SetMaterial(MaterialPtr p_material)
-{
-   // m_renderComponent->SetMaterial(p_material);
-}

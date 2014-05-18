@@ -7,6 +7,7 @@
 class Graphics;
 class Material;
 class RenderComponent;
+class Shader;
 
 struct Vertex
 {
@@ -81,6 +82,13 @@ struct Image
     int format;
     unsigned char* data;
 };
+
+enum ShaderType
+{
+    ShaderType_Default,
+    ShaderType_Diffuse
+};
+
 typedef std::shared_ptr<RenderComponent> RenderComponentPtr;
-typedef std::shared_ptr<Material>     MaterialPtr;
+typedef std::shared_ptr<Material>        MaterialPtr;
 #endif

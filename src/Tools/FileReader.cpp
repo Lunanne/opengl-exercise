@@ -9,7 +9,7 @@
 
 #include <iostream>
 #include <fstream>
-
+#include <assert.h>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -77,7 +77,7 @@ const aiScene* FileReader::ReadScene(const std::string& p_filePath, Assimp::Impo
     if (scene == NULL)
     {
         std::string error =  p_importer.GetErrorString();
-        std::printf("Assimp error : %s \n", error);
+        std::printf("Assimp error : %s \n", error.c_str());
         assert(scene != NULL);
     }
 

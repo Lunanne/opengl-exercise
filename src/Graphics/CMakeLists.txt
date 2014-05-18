@@ -6,13 +6,19 @@ include_directories("../Tools")
  set(GRAPHICS_SRC
  Graphics.cpp
  RenderComponent.cpp
- Material.cpp)
+ Material.cpp
+ Shader.cpp
+ ShaderManager.cpp
+ DefaultShader.cpp)
 
  set(GRAPHICS_H
  Graphics.h
  GraphicsTypes.h
  RenderComponent.h
- Material.h)
+ Material.h
+ Shader.h
+ ShaderManager.h
+ DefaultShader.h)
 
 
 add_library(graphics ${GRAPHICS_H} ${GRAPHICS_SRC})

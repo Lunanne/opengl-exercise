@@ -15,9 +15,7 @@ public:
     void AddRenderComponent(RenderComponentPtr p_renderComponent);
     void Render();
     void SetName(std::string p_name);
-    const std::string& GetMaterialName();
-    void SetMaterial(MaterialPtr p_material);
-
+    
 private:
     std::vector<RenderComponentPtr> m_renderComponents;
     std::string                     m_name;

@@ -33,28 +33,17 @@ private:
     GLuint                     m_vertexArrayID;
     GLuint                     m_vertexBufferID;
     GLuint                     m_textureBufferID;
-    GLuint                     m_matrixID;
-    GLuint                     m_programID;
-    GLuint                     m_vertexShaderID;
-    GLuint                     m_fragmentShaderID;
-    GLuint                     m_texSamplerLoc;
     GLuint                     m_positionLoc;
     GLuint                     m_textureCoordsLoc;
-    const GLchar*              m_vertexShader;
-    const GLchar*              m_fragmentShader;
     glm::mat4                  m_mvpMatrix;
-    bool                       m_vertexDataChanged;
     std::vector<Vertex>        m_vertices; //vertices in the right order to render(unindexed).
     std::vector<Vertex>        m_normalVertices; //normal vertices in right order.
     std::vector<TextureVertex> m_textureVertices; //vertices in the right order to render(unindexed).
     MaterialPtr                m_material;
+    ShaderType                 m_shaderType;
 
     void CreateVAO();
     void DestroyVAO();
-    void CreateShaders();
-    void DestroyShaders();
-
-    void Init();
 };
 
 #endif
