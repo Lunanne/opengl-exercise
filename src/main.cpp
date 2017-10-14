@@ -11,7 +11,7 @@
 #include <GL/glu.h>
 #endif
 
-#include <glfw/glfw3.h>
+#include <GLFW/glfw3.h>
 
 #include <math.h>
 #include <iostream>
@@ -74,7 +74,7 @@ int	main(int argc, char **argv)
     graphics.InitializeGL();
 
     ShaderManager::Init();
-    Scene scene("./Resources/cube.3ds");
+    Scene scene("../../Resources/cube.3ds");
 
     while (!glfwWindowShouldClose(window))
     {

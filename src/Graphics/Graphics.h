@@ -11,7 +11,7 @@
 #include <GL/glew.h>
 #endif
 
-#include <glfw/glfw3.h>
+#include <GLFW/glfw3.h>
 
 #include "../MainTypes.h"
 

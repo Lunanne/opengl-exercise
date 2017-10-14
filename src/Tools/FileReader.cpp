@@ -15,7 +15,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#include "stb_image.h"
+#include "../ThirdParty/stb_image.h"
 #include "../Graphics/GraphicsTypes.h"
 #include "FileReader.h"
 

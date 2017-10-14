@@ -3,7 +3,7 @@
 
 #ifndef __APPLE__
 #include <GL/glew.h>
-#include <GL/GL.h>
+#include <GL/gl.h>
 #endif
 
 #ifdef __APPLE__

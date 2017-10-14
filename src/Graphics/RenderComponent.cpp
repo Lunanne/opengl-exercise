@@ -1,6 +1,6 @@
 #ifndef __APPLE__
 #include <GL/glew.h>
-#include <GL/GL.h>
+#include <GL/gl.h>
 #endif
 
 #ifdef __APPLE__
@@ -10,7 +10,7 @@
 
 #include <algorithm>
 
-#include <Tools/FileReader.h>
+#include "../Tools/FileReader.h"
 
 #include "ShaderManager.h"
 #include "Material.h"

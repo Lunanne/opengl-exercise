@@ -5,9 +5,10 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 if(WIN32)
 set(CMAKE_CXX_FLAGS "/Wall ${CMAKE_CXX_FLAGS}")
 endif(WIN32)
-if(!WIN32)
-set(CMAKE_CXX_FLAGS "-Werror -Wall -std=c++11 ${CMAKE_CXX_FLAGS}")
-endif(!WIN32)
+if(NOT WIN32)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+endif(NOT WIN32)
+
 
 find_package(OpenGL REQUIRED)
 find_package(GLM REQUIRED)
@@ -31,11 +32,12 @@ SET(CMAKE_CXX_FLAGS "-std=c++11")
 endif (APPLE)
 
 include_directories(${INCLUDE_DIRECTORIES} ${Boost_INCLUDE_DIRS})
-include_directories(${GLFW3_INCLUDE_DIRS})
+include_directories(${GLFW3_INClsLUDE_DIRS})
 include_directories(${GLEW_INCLUDE_DIR})
 
 include_directories(${OPENGL_INCLUDE_DIRS})
 include_directories(${GLM_INCLUDE_DIRS})
+message(${GLM_INCLUDE_DIRS})
 
 include_directories(${PNG_INCLUDE_DIRS})
 
@@ -59,6 +61,8 @@ ThirdParty/stb_image.h)
 
 
 add_executable(opengl-exercise ${MAIN_SRC} ${MAIN_H})
+
+set_property(TARGET opengl-exercise PROPERTY CXX_STANDARD 11)
 
 target_link_libraries(opengl-exercise graphics)
 target_link_libraries(opengl-exercise tools)
