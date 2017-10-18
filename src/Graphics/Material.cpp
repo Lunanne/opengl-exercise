@@ -52,13 +52,23 @@ void Material::SetDiffuseColour(Colour p_colour)
 
 void Material::SetDiffuseTexture(const std::string& p_fileName)
 {
-    std::string filePath = "./Resources/" + p_fileName;
+    std::string filePath = "../../Resources/" + p_fileName;
     m_image = FileReader::ReadPNG(filePath.c_str());
+
     glGenTextures(1, &m_textureID);
     glBindTexture(GL_TEXTURE_2D, m_textureID);
-    glTexImage2D(GL_TEXTURE_2D, 0, m_image.format, m_image.width, m_image.height, 0, m_image.format, GL_UNSIGNED_BYTE, m_image.data);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_image.width, m_image.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_image.data);
+
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+
+    GLenum errCode;
+    const GLubyte *errString;
+    if ((errCode = glGetError()) != GL_NO_ERROR) {
+        errString = gluErrorString(errCode);
+        fprintf(stderr, "OpenGL Error in Rendercomponent 1: %s\n", errString);
+    }
 }
 
 const GLuint Material::GetTextureID()

@@ -7,18 +7,13 @@
 #include <OpenGL/glu.h>
 #else
 #include <GL/glew.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+
 #endif
 
 #include <GLFW/glfw3.h>
 
-#include <math.h>
 #include <iostream>
-#include <fstream>
 #include <vector>
-#include <chrono>
-#include <thread>
 
 #include "Graphics/Graphics.h"
 #include "Graphics/ShaderManager.h"
@@ -69,6 +64,8 @@ int	main(int argc, char **argv)
         return -1;
     }
 #endif
+
+    fprintf(stdout, "OpenGL version supported by this platform (%s): \n", glGetString(GL_VERSION));
 
     Graphics graphics;
     graphics.InitializeGL();

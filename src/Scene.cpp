@@ -6,7 +6,6 @@
 
 #include "Tools/FileReader.h"
 #include "Graphics/RenderComponent.h"
-#include "Graphics/Material.h"
 #include "SceneObject.h"
 #include "Scene.h"
 

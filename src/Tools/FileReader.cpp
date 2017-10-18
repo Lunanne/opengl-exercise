@@ -57,6 +57,9 @@ Image FileReader::ReadPNG(const char* p_fileName)
         memcpy(image.data, data, sizeof(unsigned char)* width * height * channels);
         stbi_image_free(data);
     }
+    else{
+        fprintf(stderr, "cannot find file %s",p_fileName  );
+    }
     return image;
 }
 

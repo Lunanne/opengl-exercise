@@ -45,6 +45,7 @@ m_shaderType(ShaderType_Default)
             m_normalVertices.push_back(Vertex(normal.x, normal.y, normal.z));
         }
     }
+
     m_material = MaterialPtr(new Material(p_aiMaterial));
     CreateVAO();
 }
@@ -66,6 +67,13 @@ void RenderComponent::CreateVAO()
     m_positionLoc = glGetAttribLocation(programID, "in_position");
     glVertexAttribPointer(m_positionLoc, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+//
+//    GLenum errCode;
+//    const GLubyte *errString;
+//    if ((errCode = glGetError()) != GL_NO_ERROR) {
+//        errString = gluErrorString(errCode);
+//        fprintf(stderr, "OpenGL Error in Rendercomponent 1: %s\n", errString);
+//    }
 
     if (m_textureVertices.empty() == false)
     {
@@ -79,6 +87,7 @@ void RenderComponent::CreateVAO()
     }
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
+
 }
 void RenderComponent::DestroyVAO()
 {
