@@ -8,3 +8,6 @@
 *.dll
 *.blend
 *.blend1
+
+**/*.swp
+
