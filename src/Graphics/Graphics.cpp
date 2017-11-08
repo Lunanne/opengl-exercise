@@ -4,7 +4,7 @@
 
 #include <vector>
 
-#include "../SceneObject.h"
+#include "RenderComponent.h"
 
 #include "Graphics.h"
 
@@ -27,13 +27,13 @@ void Graphics::InitializeGL()
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 }
 
-void Graphics::PaintGL(GLFWwindow* p_window, const std::vector<SceneObjectPtr> p_sceneObjects)
+void Graphics::PaintGL(GLFWwindow* p_window, const std::vector<RenderComponentPtr> p_renderComponents)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    for (const SceneObjectPtr sceneObject : p_sceneObjects)
+    for (const RenderComponentPtr renderComponentPtr : p_renderComponents)
     {
-        sceneObject->Render();
+        renderComponentPtr->Render();
     }
 
     glfwSwapBuffers(p_window);

@@ -12,12 +12,12 @@ endif(NOT WIN32)
 
 find_package(OpenGL REQUIRED)
 find_package(GLM REQUIRED)
-#find_package(GLUT REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(Boost 1.55 REQUIRED)
 find_package(GLFW REQUIRED)
 find_package(PNG REQUIRED)
 find_package(ASSIMP REQUIRED)
+find_package(Bullet REQUIRED)
 
 if(APPLE)
 SET(CMAKE_CXX_FLAGS "-std=c++11")
@@ -43,18 +43,14 @@ include_directories(${PNG_INCLUDE_DIRS})
 
 add_subdirectory(Tools)
 add_subdirectory(Graphics)
-
+add_subdirectory(Scene)
 
 
 set(MAIN_SRC
 main.cpp
-Scene.cpp
-SceneObject.cpp
 ThirdParty/stb_image.c)
 
 set(MAIN_H
-Scene.h
-SceneObject.h
 MainTypes.h
 ThirdParty/stb_image.h)
 
@@ -66,6 +62,7 @@ set_property(TARGET opengl-exercise PROPERTY CXX_STANDARD 11)
 
 target_link_libraries(opengl-exercise graphics)
 target_link_libraries(opengl-exercise tools)
+target_link_libraries(opengl-exercise scene)
 
 
 target_link_libraries(opengl-exercise ${GLFW_LIBRARIES})

@@ -20,7 +20,7 @@ class Graphics
 public:
     ~Graphics();
     void InitializeGL();
-    void PaintGL(GLFWwindow* p_window, const std::vector<SceneObjectPtr> p_sceneObjects);
+    void PaintGL(GLFWwindow* p_window, const std::vector<RenderComponentPtr> p_renderComponents);
 };
 
 #endif

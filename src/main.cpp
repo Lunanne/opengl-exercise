@@ -6,6 +6,7 @@
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #else
+
 #include <GL/glew.h>
 
 #endif
@@ -14,27 +15,25 @@
 
 #include <iostream>
 #include <vector>
+#include <iterator>
 
 #include "Graphics/Graphics.h"
 #include "Graphics/ShaderManager.h"
-#include "Scene.h"
+#include "Scene/Scene.h"
+#include "Scene/SceneObject.h"
 
-static void error_callback(int error, const char* description)
-{
+static void error_callback(int error, const char *description) {
     fprintf(stderr, "Error description %s \n", description);
 }
 
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
+static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
-int	main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     glfwSetErrorCallback(error_callback);
-    if (!glfwInit())
-    {
+    if (!glfwInit()) {
         fprintf(stderr, "Failed to initialize GLFW\n");
         return -1;
     }
@@ -45,9 +44,8 @@ int	main(int argc, char **argv)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 
-    GLFWwindow* window = glfwCreateWindow(1024, 768, "Opengl exercise", NULL, NULL);
-    if (!window)
-    {
+    GLFWwindow *window = glfwCreateWindow(1024, 768, "Opengl exercise", NULL, NULL);
+    if (!window) {
         fprintf(stderr, "Failed to open GLFW window.");
         glfwTerminate();
         return -1;
@@ -58,8 +56,7 @@ int	main(int argc, char **argv)
 
 #ifndef __APPLE__
     glewExperimental = true;
-    if (glewInit() != GLEW_OK)
-    {
+    if (glewInit() != GLEW_OK) {
         fprintf(stderr, "Failed to initialize GLEW\n");
         return -1;
     }
@@ -73,14 +70,19 @@ int	main(int argc, char **argv)
     ShaderManager::Init();
     Scene scene("../../Resources/cube.3ds");
 
-    while (!glfwWindowShouldClose(window))
-    {
-        graphics.PaintGL(window, scene.GetSceneObjects());
+    std::vector<RenderComponentPtr> renderComponents;
+
+    for(SceneObjectPtr sceneObjectPtr : scene.GetSceneObjects()){
+        renderComponents.push_back(sceneObjectPtr->GetRenderComponent());
+    }
+
+    while (!glfwWindowShouldClose(window)) {
+
+        graphics.PaintGL(window, renderComponents);
         glfwPollEvents();
     }
-    
+
     ShaderManager::Clear();
-    
     glfwDestroyWindow(window);
     glfwTerminate();
 

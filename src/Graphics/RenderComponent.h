@@ -14,6 +14,9 @@
 
 #include <vector>
 #include <string>
+#include <assimp/mesh.h>
+#include <assimp/material.h>
+
 
 #include <glm/glm.hpp>
 

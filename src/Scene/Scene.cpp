@@ -4,8 +4,8 @@
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 
-#include "Tools/FileReader.h"
-#include "Graphics/RenderComponent.h"
+#include "../Tools/FileReader.h"
+#include "../Graphics/RenderComponent.h"
 #include "SceneObject.h"
 #include "Scene.h"
 

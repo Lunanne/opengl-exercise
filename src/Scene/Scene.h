@@ -6,7 +6,7 @@
 #include <assimp/scene.h>
 #include <GLFW/glfw3.h>
 
-#include "MainTypes.h"
+#include "../MainTypes.h"
 
 class Scene
 {
