@@ -7,7 +7,7 @@ std::map<ShaderType, Shader*> ShaderManager::shaders;
 
 void ShaderManager::Init()
 {
-    DefaultShader* defaultShader = new DefaultShader("../../Resources/vertexShader.vert","../../Resources/fragmentShader.frag");
+    DefaultShader* defaultShader = new DefaultShader("../Resources/vertexShader.vert","../Resources/fragmentShader.frag");
     shaders.insert(std::pair<ShaderType,Shader*>(ShaderType_Default,defaultShader));
 }
 

@@ -12,15 +12,15 @@ DefaultShader::DefaultShader(const char* p_vsFilePath, const char* p_fsFilePath)
     m_mvpMatrix = projectionMatrix * viewMatrix * modelMatrix;
     m_mvpLocation = glGetUniformLocation(m_programID, "MVP");
     m_texSamplerLoc = glGetUniformLocation(m_programID, "texSampler");
-    
-    
+
+
 }
 
 void DefaultShader::Use()
 {
     glUniformMatrix4fv(m_mvpLocation, 1, GL_FALSE, &m_mvpMatrix[0][0]);
-    
+
     glUniform1i(m_texSamplerLoc, 0);
-    
+
     Shader::Use();
 }

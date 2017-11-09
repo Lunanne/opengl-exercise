@@ -14,7 +14,6 @@ Scene::Scene(const std::string& p_filePath)
     Assimp::Importer importer;
     const aiScene* scene = FileReader::ReadScene(p_filePath, importer);
     ConvertNodesToObjects(scene->mRootNode, *scene);
-
 }
 
 const std::vector<SceneObjectPtr> Scene::GetSceneObjects() const
@@ -31,7 +30,7 @@ void Scene::ConvertNodesToObjects(const aiNode* p_node, const aiScene& p_scene)
 {
     if (p_node->mNumMeshes > 0)
     {
-        SceneObjectPtr object = SceneObjectPtr(new SceneObject(p_node, p_scene));        
+        SceneObjectPtr object = SceneObjectPtr(new SceneObject(p_node, p_scene));
         m_sceneObjects.push_back(object);
     }
     for (unsigned int c = 0; c < p_node->mNumChildren; ++c)

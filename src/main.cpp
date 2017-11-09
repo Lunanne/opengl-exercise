@@ -14,13 +14,12 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
-#include <vector>
 #include <iterator>
 
 #include "Graphics/Graphics.h"
 #include "Graphics/ShaderManager.h"
 #include "Scene/Scene.h"
-#include "Scene/SceneObject.h"
+#include "Physics/World.h"
 
 static void error_callback(int error, const char *description) {
     fprintf(stderr, "Error description %s \n", description);
@@ -45,6 +44,7 @@ int main(int argc, char **argv) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 
     GLFWwindow *window = glfwCreateWindow(1024, 768, "Opengl exercise", NULL, NULL);
+#include <vector>
     if (!window) {
         fprintf(stderr, "Failed to open GLFW window.");
         glfwTerminate();
@@ -64,28 +64,25 @@ int main(int argc, char **argv) {
 
     fprintf(stdout, "OpenGL version supported by this platform (%s): \n", glGetString(GL_VERSION));
 
+    World world;
+    world.InitializeBullet();
+
     Graphics graphics;
     graphics.InitializeGL();
 
     ShaderManager::Init();
-    Scene scene("../../Resources/cube.3ds");
-
-    std::vector<RenderComponentPtr> renderComponents;
-
-    for(SceneObjectPtr sceneObjectPtr : scene.GetSceneObjects()){
-        renderComponents.push_back(sceneObjectPtr->GetRenderComponent());
-    }
-
+    Scene scene("../Resources/cube.blend");
+    world.AddPhysicComponents(scene.GetSceneObjects());
     while (!glfwWindowShouldClose(window)) {
-
-        graphics.PaintGL(window, renderComponents);
+        world.SimulatePhysics();
+        graphics.PaintGL(window, scene.GetSceneObjects());
         glfwPollEvents();
     }
+
 
     ShaderManager::Clear();
     glfwDestroyWindow(window);
     glfwTerminate();
 
     return 0;
-    exit(EXIT_SUCCESS);
 }

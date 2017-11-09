@@ -6,6 +6,7 @@
 #include <assimp/scene.h>
 
 #include "../Graphics/GraphicsTypes.h"
+#include "../Physics/PhysicsTypes.h"
 
 class SceneObject {
 public:
@@ -13,12 +14,13 @@ public:
 
     SceneObject(const aiNode *p_node, const aiScene &p_scene);
 
-    RenderComponentPtr GetRenderComponent();
+    PhysicsComponentPtr getPhysicsComponent() const;
 
-    void SetName(std::string p_name);
+    void Render();
 
 private:
-    RenderComponentPtr m_renderComponents;
+    RenderComponentPtr m_renderComponent;
+    PhysicsComponentPtr m_physicsComponent;
     std::string m_name;
 };
 

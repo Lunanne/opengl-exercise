@@ -38,7 +38,7 @@ char* FileReader::ReadFile(const char* p_fileName)
     {
         std::printf("Can't open file at %s \n", p_fileName);
     }
-    return "";
+    return nullptr;
 }
 
 Image FileReader::ReadPNG(const char* p_fileName)

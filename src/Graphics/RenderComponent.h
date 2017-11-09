@@ -25,12 +25,10 @@
 class RenderComponent
 {
 public:
-    RenderComponent(std::vector<Vertex> p_vertices, std::vector<TextureVertex> p_textureVertices, std::vector<Vertex> p_normalVertices);
+    RenderComponent(const std::vector<Vertex> p_vertices, const std::vector<TextureVertex> p_textureVertices, std::vector<Vertex> p_normalVertices);
     RenderComponent(const aiMesh* p_mesh, const aiMaterial* p_aiMaterial);
     ~RenderComponent();
-    void Render();
-    const int GetVertexCount() const;
-    void SetMaterial(MaterialPtr p_material);
+    void Render(const Vertex p_physicsTransform);
 
 private:
     GLuint                     m_vertexArrayID;
@@ -38,7 +36,8 @@ private:
     GLuint                     m_textureBufferID;
     GLuint                     m_positionLoc;
     GLuint                     m_textureCoordsLoc;
-    glm::mat4                  m_mvpMatrix;
+    GLuint                     m_programId;
+    GLint m_transformVertex;
     std::vector<Vertex>        m_vertices; //vertices in the right order to render(unindexed).
     std::vector<Vertex>        m_normalVertices; //normal vertices in right order.
     std::vector<TextureVertex> m_textureVertices; //vertices in the right order to render(unindexed).

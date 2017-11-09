@@ -31,19 +31,20 @@ SET(CMAKE_CXX_FLAGS "-std=c++11")
     include_directories(${IOKit_INCLUDE_DIRS})
 endif (APPLE)
 
-include_directories(${INCLUDE_DIRECTORIES} ${Boost_INCLUDE_DIRS})
-include_directories(${GLFW3_INClsLUDE_DIRS})
+include_directories(${Boost_INCLUDE_DIRS})
+include_directories(${GLFW3_INClLUDE_DIRS})
 include_directories(${GLEW_INCLUDE_DIR})
 
 include_directories(${OPENGL_INCLUDE_DIRS})
 include_directories(${GLM_INCLUDE_DIRS})
-message(${GLM_INCLUDE_DIRS})
+include_directories(${BULLET_INCLUDE_DIRS})
 
 include_directories(${PNG_INCLUDE_DIRS})
 
 add_subdirectory(Tools)
 add_subdirectory(Graphics)
 add_subdirectory(Scene)
+add_subdirectory(Physics)
 
 
 set(MAIN_SRC
@@ -51,8 +52,7 @@ main.cpp
 ThirdParty/stb_image.c)
 
 set(MAIN_H
-MainTypes.h
-ThirdParty/stb_image.h)
+        ThirdParty/stb_image.h)
 
 
 
@@ -63,8 +63,9 @@ set_property(TARGET opengl-exercise PROPERTY CXX_STANDARD 11)
 target_link_libraries(opengl-exercise graphics)
 target_link_libraries(opengl-exercise tools)
 target_link_libraries(opengl-exercise scene)
+target_link_libraries(opengl-exercise physics)
 
-
+target_link_libraries(opengl-exercise ${BULLET_LIBRARIES})
 target_link_libraries(opengl-exercise ${GLFW_LIBRARIES})
 target_link_libraries(opengl-exercise ${GLEW_LIBRARY})
 target_link_libraries(opengl-exercise ${Boost_LIBRARIES})

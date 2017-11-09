@@ -15,7 +15,7 @@ public:
     Material(const aiMaterial* p_material);
     Material(const Colour p_diffColour, const std::string& p_fileName);
     ~Material();
-    void SetDiffuseColour(Colour p_colour);
+    void SetDiffuseColour(const Colour p_colour);
     void SetDiffuseTexture(const std::string& p_fileName);
     const GLuint GetTextureID();
 

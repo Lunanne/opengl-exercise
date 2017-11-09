@@ -12,15 +12,16 @@
 #endif
 
 #include <GLFW/glfw3.h>
+#include "GraphicsTypes.h"
+#include "../Scene/SceneTypes.h"
 
-#include "../MainTypes.h"
 
 class Graphics
 {
 public:
     ~Graphics();
     void InitializeGL();
-    void PaintGL(GLFWwindow* p_window, const std::vector<RenderComponentPtr> p_renderComponents);
+    void PaintGL(GLFWwindow* p_window, const std::vector<SceneObjectPtr> p_sceneObjects);
 };
 
 #endif

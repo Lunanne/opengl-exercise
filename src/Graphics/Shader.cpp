@@ -47,6 +47,7 @@ Shader::Shader(const char* p_vsFilePath, const char* p_fsFilePath)
     m_programID = glCreateProgram();
     glAttachShader(m_programID, m_fragmentShaderID);
     glAttachShader(m_programID, m_vertexShaderID);
+
     glLinkProgram(m_programID);
     
     // Check the program

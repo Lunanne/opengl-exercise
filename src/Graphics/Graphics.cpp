@@ -3,6 +3,7 @@
 #endif
 
 #include <vector>
+#include <Scene/SceneTypes.h>
 
 #include "RenderComponent.h"
 
@@ -27,13 +28,13 @@ void Graphics::InitializeGL()
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 }
 
-void Graphics::PaintGL(GLFWwindow* p_window, const std::vector<RenderComponentPtr> p_renderComponents)
+void Graphics::PaintGL(GLFWwindow* p_window, const std::vector<SceneObjectPtr> p_sceneObjects)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    for (const RenderComponentPtr renderComponentPtr : p_renderComponents)
+    for (const SceneObjectPtr sceneObjectPtr : p_sceneObjects)
     {
-        renderComponentPtr->Render();
+        sceneObjectPtr->Render();
     }
 
     glfwSwapBuffers(p_window);

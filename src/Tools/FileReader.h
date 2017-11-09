@@ -5,7 +5,6 @@
 #include <assimp/Importer.hpp>
 
 #include "../Graphics/GraphicsTypes.h"
-#include "../MainTypes.h"
 
 
 class FileReader

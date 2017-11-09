@@ -5,8 +5,8 @@
 
 #include <assimp/scene.h>
 #include <GLFW/glfw3.h>
+#include "SceneTypes.h"
 
-#include "../MainTypes.h"
 
 class Scene
 {
