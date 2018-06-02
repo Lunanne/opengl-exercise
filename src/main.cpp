@@ -70,8 +70,8 @@ int main(int argc, char **argv) {
     Graphics graphics;
     graphics.InitializeGL();
 
-    ShaderManager::Init();
-    Scene scene("../Resources/cube.blend");
+    Scene scene("../Resources/world.blend");
+    ShaderManager::Init(scene.GetCamera());
     world.AddPhysicComponents(scene.GetSceneObjects());
     while (!glfwWindowShouldClose(window)) {
         world.SimulatePhysics();

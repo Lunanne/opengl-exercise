@@ -1,12 +1,25 @@
 #include <BulletCollision/CollisionShapes/btBoxShape.h>
 #include <LinearMath/btDefaultMotionState.h>
+#include <assimp/scene.h>
+#include <BulletCollision/CollisionShapes/btConvexHullShape.h>
+#include <BulletCollision/CollisionShapes/btConvexTriangleMeshShape.h>
 #include "PhysicsComponent.h"
-#include "../Graphics/GraphicsTypes.h"
 
-PhysicsComponent::PhysicsComponent() {
-    m_mass = 0.01f;
-    m_collisionShape = new btBoxShape(btVector3(1, 1, 1));
+PhysicsComponent::PhysicsComponent(const aiNode *p_node, const aiMesh *p_mesh) {
+    std::string name = std::string(p_node->mName.C_Str());
+    if (name.substr(0, 2).compare("dr") == 0) {
+        int pos = name.find("_");
+        float test = std::stoi(name.substr(2, pos - 2));
+        m_mass = std::stoi(name.substr(2, pos - 2)) / 1000.0f;
+    } else if (name.substr(0, 2).compare("sr") == 0) {
+        m_mass = 0;
+    }
 
+    m_collisionShape = new btConvexHullShape();
+    for (int i = 0; i < p_mesh->mNumVertices; i++) {
+        (dynamic_cast<btConvexHullShape *>(m_collisionShape))->addPoint(
+                btVector3(p_mesh->mVertices[i].x, p_mesh->mVertices[i].y, p_mesh->mVertices[i].z));
+    }
     btTransform startTransform;
     startTransform.setIdentity();
 
@@ -20,11 +33,11 @@ PhysicsComponent::PhysicsComponent() {
     m_rigidBody = new btRigidBody(rbInfo);
 }
 
-btRigidBody *PhysicsComponent::GetRigidBody() const{
+btRigidBody *PhysicsComponent::GetRigidBody() const {
     return m_rigidBody;
 }
 
-btCollisionShape *PhysicsComponent::GetCollisionShape() const{
+btCollisionShape *PhysicsComponent::GetCollisionShape() const {
     return m_collisionShape;
 }
 

@@ -48,7 +48,6 @@ m_shaderType(ShaderType_Default)
     }
 
     m_material = MaterialPtr(new Material(p_aiMaterial));
-    CreateVAO();
 
 }
 RenderComponent::~RenderComponent()
@@ -106,6 +105,10 @@ void RenderComponent::DestroyVAO()
 }
 void RenderComponent::Render(Vertex physicsTransform)
 {
+    if(!m_createdVao){
+        CreateVAO();
+        m_createdVao = true;
+    }
     ShaderManager::UseShader(m_shaderType);
     glBindVertexArray(m_vertexArrayID);
 

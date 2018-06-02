@@ -31,7 +31,5 @@ public:
     
     const GLuint GetProgramID() const { return m_programID;};
     virtual void Use();
-    
-    
 };
 #endif

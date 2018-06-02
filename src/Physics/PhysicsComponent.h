@@ -4,12 +4,15 @@
 
 #include <BulletCollision/CollisionShapes/btCollisionShape.h>
 #include <BulletDynamics/Dynamics/btRigidBody.h>
+#include <assimp/scene.h>
+#include <BulletCollision/CollisionShapes/btConvexHullShape.h>
+
 
 #include "../Graphics/GraphicsTypes.h"
 
 class PhysicsComponent {
 public:
-    PhysicsComponent();
+    PhysicsComponent(const aiNode* p_node, const aiMesh* p_mesh);
     ~PhysicsComponent();
     btRigidBody* GetRigidBody() const;
     btCollisionShape* GetCollisionShape() const;

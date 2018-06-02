@@ -5,9 +5,9 @@
 
 std::map<ShaderType, Shader*> ShaderManager::shaders;
 
-void ShaderManager::Init()
+void ShaderManager::Init(const Camera p_camera)
 {
-    DefaultShader* defaultShader = new DefaultShader("../Resources/vertexShader.vert","../Resources/fragmentShader.frag");
+    DefaultShader* defaultShader = new DefaultShader("../Resources/vertexShader.vert","../Resources/fragmentShader.frag", p_camera);
     shaders.insert(std::pair<ShaderType,Shader*>(ShaderType_Default,defaultShader));
 }
 

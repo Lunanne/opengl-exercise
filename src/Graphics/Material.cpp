@@ -52,7 +52,7 @@ void Material::SetDiffuseColour(const Colour p_colour)
 
 void Material::SetDiffuseTexture(const std::string& p_fileName)
 {
-    std::string filePath = "../Resources" + p_fileName;
+    std::string filePath = "../Resources/" + p_fileName;
     m_image = FileReader::ReadPNG(filePath.c_str());
 
     glGenTextures(1, &m_textureID);

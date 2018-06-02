@@ -43,6 +43,7 @@ private:
     std::vector<TextureVertex> m_textureVertices; //vertices in the right order to render(unindexed).
     MaterialPtr                m_material;
     ShaderType                 m_shaderType;
+    bool                       m_createdVao = false;
 
     void CreateVAO();
     void DestroyVAO();
