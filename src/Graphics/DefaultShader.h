@@ -4,19 +4,21 @@
 #include <glm/glm.hpp>
 
 #include "Shader.h"
+#include "Camera.h"
 
 class DefaultShader : public Shader
 {
 private:
-    GLuint m_mvpLocation;
+    GLint m_mvpLocation;
     glm::mat4 m_mvpMatrix;
     
-    GLuint m_texSamplerLoc;
+    GLint m_texSamplerLoc;
 
 public:
-    DefaultShader(const char* p_vsFilePath, const char* p_fsFilePath);
+    DefaultShader(const char* p_vsFilePath, const char* p_fsFilePath, Camera camera);
     virtual void Use();
-    
+
+    float xfov_to_yfov(float xfov, float aspect);
 };
 
 #endif

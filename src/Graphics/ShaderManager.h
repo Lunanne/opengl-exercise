@@ -4,6 +4,7 @@
 #include <map>
 
 #include "GraphicsTypes.h"
+#include "Camera.h"
 
 class Shader;
 class ShaderManager
@@ -14,7 +15,7 @@ private:
 public:
     static void UseShader(ShaderType p_shaderType);
     static const GLuint GetProgramID(ShaderType p_shaderType);
-    static void Init();
+    static void Init(Camera p_camera);
     static void Clear();
 };
 #endif

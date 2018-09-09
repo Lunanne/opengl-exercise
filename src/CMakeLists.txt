@@ -2,17 +2,16 @@ cmake_minimum_required(VERSION 2.8.12)
 project(opengl-exercise)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
-if(WIN32)
-set(CMAKE_CXX_FLAGS "/Wall ${CMAKE_CXX_FLAGS}")
-endif(WIN32)
-if(NOT WIN32)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-endif(NOT WIN32)
+#if(WIN32)
+#set(CMAKE_CXX_FLAGS "/Wall ${CMAKE_CXX_FLAGS}")
+#endif(WIN32)
+#if(NOT WIN32)
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+#endif(NOT WIN32)
 
 
 find_package(OpenGL REQUIRED)
 find_package(GLM REQUIRED)
-#find_package(GLUT REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(Boost 1.55 REQUIRED)
 find_package(GLFW REQUIRED)
@@ -31,32 +30,26 @@ SET(CMAKE_CXX_FLAGS "-std=c++11")
     include_directories(${IOKit_INCLUDE_DIRS})
 endif (APPLE)
 
-include_directories(${INCLUDE_DIRECTORIES} ${Boost_INCLUDE_DIRS})
-include_directories(${GLFW3_INClsLUDE_DIRS})
+include_directories(${Boost_INCLUDE_DIRS})
+include_directories(${GLFW3_INClLUDE_DIRS})
 include_directories(${GLEW_INCLUDE_DIR})
 
 include_directories(${OPENGL_INCLUDE_DIRS})
 include_directories(${GLM_INCLUDE_DIRS})
-message(${GLM_INCLUDE_DIRS})
 
 include_directories(${PNG_INCLUDE_DIRS})
 
 add_subdirectory(Tools)
 add_subdirectory(Graphics)
-
+add_subdirectory(Scene)
 
 
 set(MAIN_SRC
 main.cpp
-Scene.cpp
-SceneObject.cpp
 ThirdParty/stb_image.c)
 
 set(MAIN_H
-Scene.h
-SceneObject.h
-MainTypes.h
-ThirdParty/stb_image.h)
+        ThirdParty/stb_image.h)
 
 
 
@@ -66,7 +59,7 @@ set_property(TARGET opengl-exercise PROPERTY CXX_STANDARD 11)
 
 target_link_libraries(opengl-exercise graphics)
 target_link_libraries(opengl-exercise tools)
-
+target_link_libraries(opengl-exercise scene)
 
 target_link_libraries(opengl-exercise ${GLFW_LIBRARIES})
 target_link_libraries(opengl-exercise ${GLEW_LIBRARY})

@@ -45,16 +45,17 @@ m_difColour(p_diffColour)
     SetDiffuseTexture(p_fileName);
 }
 
-void Material::SetDiffuseColour(Colour p_colour)
+void Material::SetDiffuseColour(const Colour p_colour)
 {
     m_difColour = p_colour;
 }
 
 void Material::SetDiffuseTexture(const std::string& p_fileName)
 {
-    std::string filePath = "../../Resources/" + p_fileName;
+    std::string filePath = "./Resources/" + p_fileName;
     m_image = FileReader::ReadPNG(filePath.c_str());
 
+    printf("%i %i %i %s\n", m_image.width, m_image.height, m_image.format, m_image.data);
     glGenTextures(1, &m_textureID);
     glBindTexture(GL_TEXTURE_2D, m_textureID);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_image.width, m_image.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_image.data);
@@ -75,7 +76,7 @@ const GLuint Material::GetTextureID()
 {
     if (m_image.data == NULL)
     {
-        SetDiffuseTexture("white.png");
+        SetDiffuseTexture("./Resources/white.png");
     }
     return m_textureID;
 }

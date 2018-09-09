@@ -17,7 +17,7 @@
 #include "RenderComponent.h"
 
 
-RenderComponent::RenderComponent(std::vector<Vertex> p_vertices, std::vector<TextureVertex> p_textureVertices, std::vector<Vertex> p_normalVertices) :
+RenderComponent::RenderComponent(const std::vector<Vertex> p_vertices,const std::vector<TextureVertex> p_textureVertices, std::vector<Vertex> p_normalVertices) :
 m_vertices(p_vertices),
 m_textureVertices(p_textureVertices),
 m_normalVertices(p_normalVertices),
@@ -26,13 +26,14 @@ m_shaderType(ShaderType_Default)
     CreateVAO();
 }
 
-RenderComponent::RenderComponent(const aiMesh* p_mesh, const aiMaterial* p_aiMaterial) : 
+RenderComponent::RenderComponent(const aiMesh* p_mesh, const aiMaterial* p_aiMaterial) :
 m_shaderType(ShaderType_Default)
 {
-    
+
     for (unsigned int v = 0; v < p_mesh->mNumVertices; ++v)
     {
         const aiVector3D vert = p_mesh->mVertices[v];
+
         m_vertices.push_back(Vertex(vert.x, vert.y, vert.z));
         if (p_mesh->HasTextureCoords(0))
         {
@@ -47,7 +48,7 @@ m_shaderType(ShaderType_Default)
     }
 
     m_material = MaterialPtr(new Material(p_aiMaterial));
-    CreateVAO();
+
 }
 RenderComponent::~RenderComponent()
 {
@@ -57,23 +58,17 @@ RenderComponent::~RenderComponent()
 
 void RenderComponent::CreateVAO()
 {
-    const GLuint programID = ShaderManager::GetProgramID(m_shaderType);
+    m_programId = ShaderManager::GetProgramID(m_shaderType);
     glGenVertexArrays(1, &m_vertexArrayID);
     glBindVertexArray(m_vertexArrayID);
+
 
     glGenBuffers(1, &m_vertexBufferID);
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
     glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * 3 * sizeof(GLfloat), m_vertices.data(), GL_STATIC_DRAW);
-    m_positionLoc = glGetAttribLocation(programID, "in_position");
+    m_positionLoc = glGetAttribLocation(m_programId, "in_position");
     glVertexAttribPointer(m_positionLoc, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-//
-//    GLenum errCode;
-//    const GLubyte *errString;
-//    if ((errCode = glGetError()) != GL_NO_ERROR) {
-//        errString = gluErrorString(errCode);
-//        fprintf(stderr, "OpenGL Error in Rendercomponent 1: %s\n", errString);
-//    }
 
     if (m_textureVertices.empty() == false)
     {
@@ -81,14 +76,23 @@ void RenderComponent::CreateVAO()
         glBindBuffer(GL_ARRAY_BUFFER, m_textureBufferID);
         glBufferData(GL_ARRAY_BUFFER, m_textureVertices.size() * 2 * sizeof(GLfloat), m_textureVertices.data(), GL_STATIC_DRAW);
 
-        m_textureCoordsLoc = glGetAttribLocation(programID, "in_texCoords");
+        m_textureCoordsLoc = glGetAttribLocation(m_programId, "in_texCoords");
         glVertexAttribPointer(m_textureCoordsLoc, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
 
+    GLuint tbo;
+    glGenBuffers(1, &tbo);
+    glBindBuffer(GL_ARRAY_BUFFER, tbo);
+    glBufferData(GL_ARRAY_BUFFER, 35*3, nullptr, GL_STATIC_READ);
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, tbo);
+
 }
+
+
+
 void RenderComponent::DestroyVAO()
 {
     glDisableVertexAttribArray(0);
@@ -101,6 +105,10 @@ void RenderComponent::DestroyVAO()
 }
 void RenderComponent::Render()
 {
+    if(!m_createdVao){
+        CreateVAO();
+        m_createdVao = true;
+    }
     ShaderManager::UseShader(m_shaderType);
     glBindVertexArray(m_vertexArrayID);
 
@@ -109,7 +117,7 @@ void RenderComponent::Render()
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_material->GetTextureID());
-    
+
     if (m_textureVertices.empty() == false)
     {
         glBindBuffer(GL_ARRAY_BUFFER, m_textureBufferID);
@@ -124,8 +132,7 @@ void RenderComponent::Render()
         glGenBuffers(1, &m_textureBufferID);
         glBindBuffer(GL_ARRAY_BUFFER, m_textureBufferID);
         glBufferData(GL_ARRAY_BUFFER, m_textureVertices.size() * 2 * sizeof(GLfloat), m_textureVertices.data(), GL_STATIC_DRAW);
-        
-        m_textureCoordsLoc = glGetAttribLocation(ShaderManager::GetProgramID(m_shaderType), "in_texCoords");
+
         glVertexAttribPointer(m_textureCoordsLoc, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
     }
@@ -133,14 +140,4 @@ void RenderComponent::Render()
     glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-const int RenderComponent::GetVertexCount() const
-{
-    return m_vertices.size();
-}
-
-void RenderComponent::SetMaterial(MaterialPtr p_material)
-{
-    m_material = p_material;
 }
