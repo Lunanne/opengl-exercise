@@ -25,7 +25,6 @@
 class RenderComponent
 {
 public:
-    RenderComponent(const std::vector<Vertex> p_vertices, const std::vector<TextureVertex> p_textureVertices, std::vector<Vertex> p_normalVertices);
     RenderComponent(const aiMesh* p_mesh, const aiMaterial* p_aiMaterial);
     ~RenderComponent();
     void Render();
@@ -33,14 +32,11 @@ public:
 private:
     GLuint                     m_vertexArrayID;
     GLuint                     m_vertexBufferID;
-    GLuint                     m_textureBufferID;
     GLuint                     m_positionLoc;
-    GLuint                     m_textureCoordsLoc;
     GLuint                     m_programId;
     GLint m_transformVertex;
     std::vector<Vertex>        m_vertices; //vertices in the right order to render(unindexed).
     std::vector<Vertex>        m_normalVertices; //normal vertices in right order.
-    std::vector<TextureVertex> m_textureVertices; //vertices in the right order to render(unindexed).
     MaterialPtr                m_material;
     ShaderType                 m_shaderType;
     bool                       m_createdVao = false;

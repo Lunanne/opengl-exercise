@@ -13,7 +13,7 @@
 
 #include <GLFW/glfw3.h>
 
-#include "../MainTypes.h"
+#include "../Scene/SceneTypes.h"
 
 class Graphics
 {

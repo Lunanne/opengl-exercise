@@ -28,29 +28,6 @@ struct Vertex
     }
 };
 
-struct TextureVertex
-{
-    float u;
-    float v;
-
-    TextureVertex()
-    {
-        u = v = 0;
-    }
-
-    TextureVertex(float p_u, float p_v) :
-        u(p_u),
-        v(p_v)
-    {
-    }
-};
-
-struct Face
-{
-    std::vector<short> vertexIndexes;
-    std::vector<short> textureIndexes;
-    std::vector<short> normalIndexes;
-};
 
 struct Colour
 {
@@ -74,19 +51,9 @@ struct Colour
 
 };
 
-struct Image
-{
-    int width;
-    int height;
-    int bitDepth;
-    int format;
-    unsigned char* data;
-};
-
 enum ShaderType
 {
     ShaderType_Default,
-    ShaderType_Diffuse
 };
 
 typedef std::shared_ptr<RenderComponent> RenderComponentPtr;

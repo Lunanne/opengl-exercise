@@ -4,7 +4,8 @@
 
 #include <vector>
 
-#include "../SceneObject.h"
+#include "../Scene/SceneTypes.h"
+#include "../Scene/SceneObject.h"
 
 #include "Graphics.h"
 
