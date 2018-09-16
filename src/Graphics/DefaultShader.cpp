@@ -20,6 +20,8 @@ DefaultShader::DefaultShader(const char* p_vsFilePath, const char* p_fsFilePath,
 
 void DefaultShader::Use()
 {
+    glLinkProgram(m_programID);
+    glUseProgram(m_programID);
     glUniformMatrix4fv(m_mvpLocation, 1, GL_FALSE, &m_mvpMatrix[0][0]);
 
     Shader::Use();
