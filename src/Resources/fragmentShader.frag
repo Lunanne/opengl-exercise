@@ -1,4 +1,4 @@
-#version 330 core
+#version 430
 out vec4 color;
 in vec2 UVcoords;
 uniform sampler2D texSampler;
