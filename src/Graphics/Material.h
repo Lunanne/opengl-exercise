@@ -12,7 +12,7 @@ class Material
 {
 public:
     Material(const aiMaterial* p_material);
-
+    Colour getDiffuseColour(){return m_difColour;}
 private:
     Colour m_difColour;
 };

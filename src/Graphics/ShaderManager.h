@@ -13,7 +13,7 @@ private:
     static std::map<ShaderType, Shader*> shaders;
     
 public:
-    static void UseShader(ShaderType p_shaderType);
+    static void UseShader(ShaderType p_shaderType, MaterialPtr p_material);
     static const GLuint GetProgramID(ShaderType p_shaderType);
     static void Init(Camera p_camera);
     static void Clear();

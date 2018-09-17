@@ -52,7 +52,7 @@ void RenderComponent::CreateVAO()
     glGenBuffers(1, &m_vertexBufferID);
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
     glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * 3 * sizeof(GLfloat), m_vertices.data(), GL_STATIC_DRAW);
-    m_positionLoc = glGetAttribLocation(m_programId, "in_position");
+    m_positionLoc = glGetAttribLocation(m_programId, "VertexPosition");
     glVertexAttribPointer(m_positionLoc, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -77,7 +77,7 @@ void RenderComponent::Render()
         CreateVAO();
         m_createdVao = true;
     }
-    ShaderManager::UseShader(m_shaderType);
+    ShaderManager::UseShader(m_shaderType, m_material);
     glBindVertexArray(m_vertexArrayID);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
