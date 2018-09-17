@@ -42,6 +42,12 @@ void Scene::ConvertNodesToObjects(const aiNode *p_node, const aiScene &p_scene) 
         m_camera.m_position = glm::vec3(aiCamera->mPosition.x, aiCamera->mPosition.y, aiCamera->mPosition.z);
         m_camera.m_up = glm::vec3(aiCamera->mUp.x, aiCamera->mUp.y, aiCamera->mUp.z);
     }
+    if(p_scene.mNumLights > 0){
+        aiLight *aiLight = p_scene.mLights[0];
+        //z axis is the other way around in opengl compared to blender
+        m_light.m_position = glm::vec3(aiLight->mPosition.x,aiLight->mPosition.y, -aiLight->mPosition.z);
+        m_light.m_intensity = aiLight->mAttenuationLinear;
+    }
 
 
 }

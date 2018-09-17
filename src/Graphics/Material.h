@@ -13,7 +13,9 @@ class Material
 public:
     Material(const aiMaterial* p_material);
     Colour getDiffuseColour(){return m_difColour;}
+    float getReflectivity(){return m_reflectivity;}
 private:
+    float m_reflectivity = .8f;
     Colour m_difColour;
 };
 #endif

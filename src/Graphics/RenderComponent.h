@@ -32,9 +32,10 @@ public:
 private:
     GLuint                     m_vertexArrayID;
     GLuint                     m_vertexBufferID;
+    GLuint                     m_normalBufferID;
     GLuint                     m_positionLoc;
+    GLuint                     m_normalLoc;
     GLuint                     m_programId;
-    GLint m_transformVertex;
     std::vector<Vertex>        m_vertices; //vertices in the right order to render(unindexed).
     std::vector<Vertex>        m_normalVertices; //normal vertices in right order.
     MaterialPtr                m_material;

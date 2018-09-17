@@ -154,7 +154,7 @@ int main(int argc, char **argv) {
     graphics.InitializeGL();
 
     Scene scene("./Resources/world.blend");
-    ShaderManager::Init(scene.GetCamera());
+    ShaderManager::Init(scene.GetCamera(), scene.GetLight());
     while (!glfwWindowShouldClose(window)) {
         graphics.PaintGL(window, scene.GetSceneObjects());
         glfwPollEvents();
