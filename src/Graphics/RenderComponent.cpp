@@ -29,6 +29,8 @@ RenderComponent::RenderComponent(const aiMesh *p_mesh, const aiMaterial *p_aiMat
         if (p_mesh->HasNormals()) {
             const aiVector3D normal = p_mesh->mNormals[v];
             m_normalVertices.push_back(Vertex(normal.x, normal.y, normal.z));
+            printf("vertex %d %f %f %f\n", v, vert.x,vert.y,vert.z);
+            printf("normal %d %f %f %f\n",v, normal.x,normal.y,normal.z);
         }
     }
 

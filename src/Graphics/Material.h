@@ -13,9 +13,13 @@ class Material
 public:
     Material(const aiMaterial* p_material);
     Colour getDiffuseColour(){return m_difColour;}
-    float getReflectivity(){return m_reflectivity;}
+    Colour getSpecularColour(){return m_specularColour;}
+    Colour getAmbientColour(){return m_ambientColour;}
+    float getShininess(){return m_shininess;}
 private:
-    float m_reflectivity = .8f;
     Colour m_difColour;
+    Colour m_ambientColour ;
+    Colour m_specularColour;
+    float m_shininess;
 };
 #endif

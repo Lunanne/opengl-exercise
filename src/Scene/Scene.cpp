@@ -46,7 +46,9 @@ void Scene::ConvertNodesToObjects(const aiNode *p_node, const aiScene &p_scene) 
         aiLight *aiLight = p_scene.mLights[0];
         //z axis is the other way around in opengl compared to blender
         m_light.m_position = glm::vec3(aiLight->mPosition.x,aiLight->mPosition.y, -aiLight->mPosition.z);
-        m_light.m_intensity = aiLight->mAttenuationLinear;
+        m_light.m_ambColour = Colour(aiLight->mColorAmbient.r, aiLight->mColorAmbient.g, aiLight->mColorAmbient.b, 1.f);
+        m_light.m_diffColour = Colour(aiLight->mColorDiffuse.r, aiLight->mColorDiffuse.g, aiLight->mColorDiffuse.b, 1.f);
+        m_light.m_specColour = Colour(aiLight->mColorSpecular.r, aiLight->mColorSpecular.g, aiLight->mColorSpecular.b, 1.f);
     }
 
 
