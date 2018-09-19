@@ -1,22 +1,28 @@
 #version 430
+in vec3 Position;
+in vec3 Normal;
 
-in vec3 FrontColor;
-in vec3 BackColor;
-in vec2 TexCoord;
+uniform vec4 LightPosition;
+uniform vec3 LightIntensity;
+uniform vec3 Kd;
+uniform vec3 Ka;
+uniform vec3 Ks;
+uniform float Shininess;
+
 
 layout (location = 0) out vec4 FragColor;
 
+vec3 ads(){
+  vec3 n = normalize(Normal);
+  vec3 s = normalize( vec3(LightPosition) - Position);
+  vec3 v = normalize(vec3(-Position));
+  vec3 h = normalize(v + s);
+  return LightIntensity * (Ka +
+                           Kd * max( dot(s,Normal),0.0) +
+                           Ks * pow( max( dot(h,n), 0.0), Shininess));
+  }
+
 void main()
 {
-  const float scale = 500.0;
-
-  bvec2 toDiscard = greaterThan( fract(TexCoord * scale), vec2(0.2, 0.2));
-
-  if (all(toDiscard))
-    discard;
-
-  if(gl_FrontFacing)
-    FragColor = vec4(FrontColor, 1.0);
-  else
-    FragColor = vec4(BackColor, 1.0);
+  FragColor = vec4(ads(),1.0);
 }

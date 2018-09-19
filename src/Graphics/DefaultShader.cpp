@@ -35,34 +35,26 @@ DefaultShader::DefaultShader(const char *p_vsFilePath, const char *p_fsFilePath,
     glm::mat4 normalMatrix = glm::transpose(glm::inverse(modelViewMatrix));
     GLuint nLoc = glGetUniformLocation(m_programID, "NormalMatrix");
     glUniformMatrix3fv(nLoc, 1, GL_FALSE, &normalMatrix[0][0]);
-    GLuint lightPositionLoc = glGetUniformLocation(m_programID, "Light.Position");
+    GLuint lightPositionLoc = glGetUniformLocation(m_programID, "LightPosition");
     glm::vec4 lightEyePos =
             modelViewMatrix * glm::vec4(light.m_position.x, light.m_position.y, light.m_position.z, 1.0f);
     glUniform4f(lightPositionLoc, lightEyePos.x, lightEyePos.y, lightEyePos.z, lightEyePos.w);
 
-    GLuint lightDiffuseLoc = glGetUniformLocation(m_programID, "Light.Ld");
+    GLuint lightDiffuseLoc = glGetUniformLocation(m_programID, "LightIntensity");
     glUniform3f(lightDiffuseLoc, light.m_diffColour.r, light.m_diffColour.g, light.m_diffColour.b);
-
-    GLuint lightAmbientLoc = glGetUniformLocation(m_programID, "Light.La");
-    glUniform3f(lightAmbientLoc, light.m_ambColour.r, light.m_ambColour.b, light.m_ambColour.b);
-
-    GLuint lightSpecularLoc = glGetUniformLocation(m_programID, "Light.Ls");
-    glUniform3f(lightSpecularLoc, light.m_specColour.r, light.m_specColour.g ,light.m_specColour.b);
-
-
 }
 
 void DefaultShader::Use(MaterialPtr material) {
-    GLuint materialDiffuseLoc = glGetUniformLocation(m_programID, "Material.Kd");
+    GLuint materialDiffuseLoc = glGetUniformLocation(m_programID, "Kd");
     glUniform3f(materialDiffuseLoc, material->getDiffuseColour().r, material->getDiffuseColour().g,
                 material->getDiffuseColour().b);
-    GLuint materialAmbientLoc = glGetUniformLocation(m_programID, "Material.Ka");
+    GLuint materialAmbientLoc = glGetUniformLocation(m_programID, "Ka");
     glUniform3f(materialAmbientLoc, material->getAmbientColour().r, material->getAmbientColour().g,
                 material->getAmbientColour().b);
-    GLuint materialSpecularLoc = glGetUniformLocation(m_programID, "Material.Ks");
+    GLuint materialSpecularLoc = glGetUniformLocation(m_programID, "Ks");
     glUniform3f(materialSpecularLoc, material->getSpecularColour().r, material->getSpecularColour().g,
                 material->getSpecularColour().b);
-    GLuint materialShininess = glGetUniformLocation(m_programID, "Material.Shininess");
+    GLuint materialShininess = glGetUniformLocation(m_programID, "Shininess");
     glUniform1f(materialShininess,material->getShininess());
 
 //printf("%f, %f, %f\n", material->getAmbientColour().r, material->getAmbientColour().g, material->getAmbientColour().b);

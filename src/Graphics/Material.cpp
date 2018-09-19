@@ -29,6 +29,6 @@ Material::Material(const aiMaterial *p_material) {
 
     ai_real shininess;
     p_material->Get(AI_MATKEY_SHININESS, shininess);
-    m_shininess = shininess;
+    m_shininess = shininess/10.f;
 }
 
