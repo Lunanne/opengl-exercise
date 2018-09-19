@@ -56,6 +56,24 @@ enum ShaderType
     ShaderType_Default,
 };
 
+struct TextureVertex
+{
+    float u;
+    float v;
+
+    TextureVertex()
+    {
+        u = v = 0;
+    }
+
+    TextureVertex(float p_u, float p_v) :
+            u(p_u),
+            v(p_v)
+    {
+    }
+};
+
+
 typedef std::shared_ptr<RenderComponent> RenderComponentPtr;
 typedef std::shared_ptr<Material>        MaterialPtr;
 #endif

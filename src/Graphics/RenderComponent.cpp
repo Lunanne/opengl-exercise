@@ -32,6 +32,13 @@ RenderComponent::RenderComponent(const aiMesh *p_mesh, const aiMaterial *p_aiMat
             printf("vertex %d %f %f %f\n", v, vert.x,vert.y,vert.z);
             printf("normal %d %f %f %f\n",v, normal.x,normal.y,normal.z);
         }
+        if (p_mesh->HasTextureCoords(0))
+        {
+            const aiVector3D textVert = p_mesh->mTextureCoords[0][v];
+            m_textureVertices.push_back(TextureVertex(textVert.x, textVert.y));
+            printf("texture %d %f %f \n", v, textVert.x,textVert.y);
+        }
+
     }
 
     m_material = std::make_shared<Material>(p_aiMaterial);
@@ -65,6 +72,16 @@ void RenderComponent::CreateVAO() {
     glEnableVertexAttribArray(m_normalLoc);
     glBindBuffer(GL_ARRAY_BUFFER, m_normalBufferID);
     glVertexAttribPointer(m_normalLoc, 3, GL_FLOAT, GL_FALSE, 0, (void *) 0);
+
+    glGenBuffers(1, &m_textureBufferID);
+    glBindBuffer(GL_ARRAY_BUFFER, m_textureBufferID);
+    glBufferData(GL_ARRAY_BUFFER, m_textureVertices.size() * 2 * sizeof(GLfloat), m_textureVertices.data(), GL_STATIC_DRAW);
+    m_textureCoordsLoc = glGetAttribLocation(m_programId, "VertexTexCoord");
+    glEnableVertexAttribArray(m_textureCoordsLoc);
+    glBindBuffer(GL_ARRAY_BUFFER, m_textureBufferID);
+    glVertexAttribPointer(m_textureCoordsLoc, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+
     glBindVertexArray(0);
 }
 
@@ -74,6 +91,7 @@ void RenderComponent::DestroyVAO() {
     glDeleteBuffers(1, &m_vertexBufferID);
     glDeleteVertexArrays(1, &m_vertexArrayID);
     glDeleteBuffers(1, &m_normalBufferID);
+    glDeleteBuffers(1, &m_textureBufferID);
 
     m_vertices.clear();
     m_normalVertices.clear();
@@ -86,6 +104,8 @@ void RenderComponent::Render() {
     }
     ShaderManager::UseShader(m_shaderType, m_material);
 
+    glDisable(GL_CULL_FACE);
+    glFrontFace(GL_CW);
     glBindVertexArray(m_vertexArrayID);
     glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
 

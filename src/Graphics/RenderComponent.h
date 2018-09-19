@@ -33,11 +33,14 @@ private:
     GLuint                     m_vertexArrayID;
     GLuint                     m_vertexBufferID;
     GLuint                     m_normalBufferID;
+    GLuint                     m_textureBufferID;
     GLuint                     m_positionLoc;
     GLuint                     m_normalLoc;
+    GLuint                     m_textureCoordsLoc;
     GLuint                     m_programId;
     std::vector<Vertex>        m_vertices; //vertices in the right order to render(unindexed).
     std::vector<Vertex>        m_normalVertices; //normal vertices in right order.
+    std::vector<TextureVertex> m_textureVertices; //vertices in the right order to render(unindexed).
     MaterialPtr                m_material;
     ShaderType                 m_shaderType;
     bool                       m_createdVao = false;
