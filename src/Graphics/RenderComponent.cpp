@@ -68,7 +68,7 @@ void RenderComponent::CreateVAO() {
     glBindBuffer(GL_ARRAY_BUFFER, m_normalBufferID);
     glBufferData(GL_ARRAY_BUFFER, m_normalVertices.size() * 3 * sizeof(GLfloat), m_normalVertices.data(),
                  GL_STATIC_DRAW);
-    m_normalLoc = glGetAttribLocation(m_programId, "VertexNormal");
+    m_normalLoc = 1;// glGetAttribLocation(m_programId, "VertexNormal");
     glEnableVertexAttribArray(m_normalLoc);
     glBindBuffer(GL_ARRAY_BUFFER, m_normalBufferID);
     glVertexAttribPointer(m_normalLoc, 3, GL_FLOAT, GL_FALSE, 0, (void *) 0);
