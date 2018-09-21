@@ -6,7 +6,8 @@
 struct Light {
     glm::vec3 m_position;
     Colour m_diffColour;
-    Colour m_ambColour;
-    Colour m_specColour;
+    glm::vec3 m_direction;
+    float m_exponent;
+    float m_cutoff;
 };
 #endif //OPENGL_EXERCISE_LIGHT_H

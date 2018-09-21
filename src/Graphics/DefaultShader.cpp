@@ -35,13 +35,22 @@ DefaultShader::DefaultShader(const char *p_vsFilePath, const char *p_fsFilePath,
     glm::mat4 normalMatrix = glm::transpose(glm::inverse(modelViewMatrix));
     GLuint nLoc = glGetUniformLocation(m_programID, "NormalMatrix");
     glUniformMatrix3fv(nLoc, 1, GL_FALSE, &normalMatrix[0][0]);
-    GLuint lightPositionLoc = glGetUniformLocation(m_programID, "LightPosition");
+    GLuint lightPositionLoc = glGetUniformLocation(m_programID, "Spot.position");
     glm::vec4 lightEyePos =
-            modelViewMatrix * glm::vec4(light.m_position.x, light.m_position.y, light.m_position.z, 1.0f);
+            modelViewMatrix* glm::vec4(0.f, 0.f, -2.f, 1.0f);
     glUniform4f(lightPositionLoc, lightEyePos.x, lightEyePos.y, lightEyePos.z, lightEyePos.w);
 
-    GLuint lightDiffuseLoc = glGetUniformLocation(m_programID, "LightIntensity");
+    GLuint lightDiffuseLoc = glGetUniformLocation(m_programID, "Spot.intensity");
     glUniform3f(lightDiffuseLoc, light.m_diffColour.r, light.m_diffColour.g, light.m_diffColour.b);
+
+    GLuint lightDirectionLoc = glGetUniformLocation(m_programID, "Spot.direction");
+    glUniform3f(lightDirectionLoc, 0.f, 1.f, 0.f);
+
+    GLuint lightExponentLoc = glGetUniformLocation(m_programID, "Spot.exponent");
+    glUniform1f(lightExponentLoc, 500.f);
+
+    GLuint lightCutoffLoc = glGetUniformLocation(m_programID, "Spot.cutoff");
+    glUniform1f(lightCutoffLoc,85.f);
 }
 
 void DefaultShader::Use(MaterialPtr material) {
@@ -55,9 +64,8 @@ void DefaultShader::Use(MaterialPtr material) {
     glUniform3f(materialSpecularLoc, material->getSpecularColour().r, material->getSpecularColour().g,
                 material->getSpecularColour().b);
     GLuint materialShininess = glGetUniformLocation(m_programID, "Shininess");
-    glUniform1f(materialShininess,material->getShininess());
+    glUniform1f(materialShininess, material->getShininess());
 
-//printf("%f, %f, %f\n", material->getAmbientColour().r, material->getAmbientColour().g, material->getAmbientColour().b);
 
     Shader::Use(material);
 }
