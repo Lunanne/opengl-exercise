@@ -16,7 +16,8 @@
 DefaultShader::DefaultShader(const char *p_vsFilePath, const char *p_fsFilePath, const Camera camera, const Light light)
         : Shader(
         p_vsFilePath, p_fsFilePath) {
-    glm::mat4 projectionMatrix = glm::perspective(camera.m_viewAngle, camera.m_viewRatio, camera.m_nearDistance,
+    glm::mat4 projectionMatrix = glm::perspective(camera.m_viewAngle,
+                                                  camera.m_viewRatio, camera.m_nearDistance,
                                                   camera.m_farDistance);
     glm::mat4 viewMatrix = glm::lookAt(camera.m_position, camera.m_lookAtVec, camera.m_up);
 
@@ -37,11 +38,22 @@ DefaultShader::DefaultShader(const char *p_vsFilePath, const char *p_fsFilePath,
     glUniformMatrix3fv(nLoc, 1, GL_FALSE, &normalMatrix[0][0]);
     GLuint lightPositionLoc = glGetUniformLocation(m_programID, "LightPosition");
     glm::vec4 lightEyePos =
-            modelViewMatrix * glm::vec4(light.m_position.x, light.m_position.y, -light.m_position.z, 1.0f);
+            modelViewMatrix * glm::vec4(light.m_position.x, light.m_position.y, light.m_position.z, 1.0f);
     glUniform4f(lightPositionLoc, lightEyePos.x, lightEyePos.y, lightEyePos.z, lightEyePos.w);
 
     GLuint lightDiffuseLoc = glGetUniformLocation(m_programID, "LightIntensity");
     glUniform3f(lightDiffuseLoc, light.m_diffColour.r, light.m_diffColour.g, light.m_diffColour.b);
+
+
+    GLuint fogMaxLoc = glGetUniformLocation(m_programID, "Fog.maxDist");
+    glUniform1f(fogMaxLoc, 500.f);
+
+    GLuint fogMinLoc = glGetUniformLocation(m_programID, "Fog.minDist");
+    glUniform1f(fogMaxLoc, 8.f);
+
+    GLuint fogColorLoc = glGetUniformLocation(m_programID, "Fog.color");
+    glUniform3f(fogColorLoc, 0.0f, 0.0f, 0.0f);
+
 }
 
 void DefaultShader::Use(MaterialPtr material) {
@@ -51,6 +63,11 @@ void DefaultShader::Use(MaterialPtr material) {
     GLuint materialAmbientLoc = glGetUniformLocation(m_programID, "Ka");
     glUniform3f(materialAmbientLoc, material->getAmbientColour().r, material->getAmbientColour().g,
                 material->getAmbientColour().b);
+    GLuint materialSpecular = glGetUniformLocation(m_programID, "Ks");
+    glUniform3f(materialSpecular, material->getSpecularColour().r, material->getSpecularColour().g,
+                material->getSpecularColour().b);
+    GLuint materialShininess = glGetUniformLocation(m_programID, "Shininess");
+    glUniform1f(materialShininess,material->getShininess());
 
 
     Shader::Use(material);
