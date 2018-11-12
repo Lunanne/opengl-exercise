@@ -16,7 +16,8 @@
 DefaultShader::DefaultShader(const char *p_vsFilePath, const char *p_fsFilePath, const Camera camera, const Light light)
         : Shader(
         p_vsFilePath, p_fsFilePath) {
-    glm::mat4 projectionMatrix = glm::perspective(camera.m_viewAngle, camera.m_viewRatio, camera.m_nearDistance,
+    printf("camera %f \n", camera.m_viewAngle);
+    glm::mat4 projectionMatrix = glm::perspective(2 * camera.m_viewAngle, camera.m_viewRatio, camera.m_nearDistance,
                                                   camera.m_farDistance);
     glm::mat4 viewMatrix = glm::lookAt(camera.m_position, camera.m_lookAtVec, camera.m_up);
 
@@ -37,7 +38,7 @@ DefaultShader::DefaultShader(const char *p_vsFilePath, const char *p_fsFilePath,
     glUniformMatrix3fv(nLoc, 1, GL_FALSE, &normalMatrix[0][0]);
     GLuint lightPositionLoc = glGetUniformLocation(m_programID, "Spot.position");
     glm::vec4 lightEyePos =
-            modelViewMatrix* glm::vec4(0.f, 0.f, -2.f, 1.0f);
+            modelViewMatrix * glm::vec4(0.f, 0.f, -2.f, 1.0f);
     glUniform4f(lightPositionLoc, lightEyePos.x, lightEyePos.y, lightEyePos.z, lightEyePos.w);
 
     GLuint lightDiffuseLoc = glGetUniformLocation(m_programID, "Spot.intensity");
@@ -50,7 +51,7 @@ DefaultShader::DefaultShader(const char *p_vsFilePath, const char *p_fsFilePath,
     glUniform1f(lightExponentLoc, 500.f);
 
     GLuint lightCutoffLoc = glGetUniformLocation(m_programID, "Spot.cutoff");
-    glUniform1f(lightCutoffLoc,85.f);
+    glUniform1f(lightCutoffLoc, 85.f);
 }
 
 void DefaultShader::Use(MaterialPtr material) {

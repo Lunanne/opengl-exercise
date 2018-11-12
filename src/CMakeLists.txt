@@ -41,6 +41,8 @@ include_directories(${GLM_INCLUDE_DIRS})
 
 include_directories(${PNG_INCLUDE_DIRS})
 
+include_directories(${ASSIMP_INCLUDE_DIR})
+
 add_subdirectory(Tools)
 add_subdirectory(Graphics)
 add_subdirectory(Scene)
