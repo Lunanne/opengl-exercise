@@ -17,7 +17,7 @@ DefaultShader::DefaultShader(const char *p_vsFilePath, const char *p_fsFilePath,
         : Shader(
         p_vsFilePath, p_fsFilePath) {
     printf("camera %f \n", camera.m_viewAngle);
-    glm::mat4 projectionMatrix = glm::perspective(2 * camera.m_viewAngle, camera.m_viewRatio, camera.m_nearDistance,
+    glm::mat4 projectionMatrix = glm::perspective(camera.m_viewAngle, camera.m_viewRatio, camera.m_nearDistance,
                                                   camera.m_farDistance);
     glm::mat4 viewMatrix = glm::lookAt(camera.m_position, camera.m_lookAtVec, camera.m_up);
 
@@ -37,21 +37,21 @@ DefaultShader::DefaultShader(const char *p_vsFilePath, const char *p_fsFilePath,
     GLuint nLoc = glGetUniformLocation(m_programID, "NormalMatrix");
     glUniformMatrix3fv(nLoc, 1, GL_FALSE, &normalMatrix[0][0]);
     GLuint lightPositionLoc = glGetUniformLocation(m_programID, "Spot.position");
-    glm::vec4 lightEyePos =
-            modelViewMatrix * glm::vec4(0.f, 0.f, -2.f, 1.0f);
-    glUniform4f(lightPositionLoc, lightEyePos.x, lightEyePos.y, lightEyePos.z, lightEyePos.w);
+//    glm::vec4 lightEyePos =
+//            modelViewMatrix * glm::vec4(light.m_position, 1.0f);
+    glUniform4f(lightPositionLoc, light.m_position.x, light.m_position.y, light.m_position.z, 1.0f);
 
     GLuint lightDiffuseLoc = glGetUniformLocation(m_programID, "Spot.intensity");
     glUniform3f(lightDiffuseLoc, light.m_diffColour.r, light.m_diffColour.g, light.m_diffColour.b);
 
     GLuint lightDirectionLoc = glGetUniformLocation(m_programID, "Spot.direction");
-    glUniform3f(lightDirectionLoc, 0.f, 1.f, 0.f);
+    glUniform3f(lightDirectionLoc, light.m_direction.x, light.m_direction.y, light.m_direction.z);
 
     GLuint lightExponentLoc = glGetUniformLocation(m_programID, "Spot.exponent");
-    glUniform1f(lightExponentLoc, 500.f);
+    glUniform1f(lightExponentLoc, light.m_exponent);
 
     GLuint lightCutoffLoc = glGetUniformLocation(m_programID, "Spot.cutoff");
-    glUniform1f(lightCutoffLoc, 85.f);
+    glUniform1f(lightCutoffLoc, light.m_cutoff);
 }
 
 void DefaultShader::Use(MaterialPtr material) {

@@ -1,47 +1,49 @@
-#version 430
+#version 410
+
 in vec3 Position;
 in vec3 Normal;
 
 struct SpotLightInfo {
-vec4 position;
-vec3 intensity;
-vec3 direction;
-float exponent;
-float cutoff;
+    vec4 position;   // Position in eye coords
+    vec3 intensity;
+    vec3 direction;  // Direction of the spotlight in eye coords.
+    float exponent;  // Angular attenuation exponent
+    float cutoff;    // Cutoff angle (between 0 and 90)
 };
 uniform SpotLightInfo Spot;
 
-uniform vec3 Kd;
-uniform vec3 Ka;
-uniform vec3 Ks;
-uniform float Shininess;
+uniform vec3 Kd;            // Diffuse reflectivity
+uniform vec3 Ka;            // Ambient reflectivity
+uniform vec3 Ks;            // Specular reflectivity
+uniform float Shininess;    // Specular shininess factor
 
+layout( location = 0 ) out vec4 FragColor;
 
-layout (location = 0) out vec4 FragColor;
+vec3 adsWithSpotlight( )
+{
+    vec3 n = normalize(Normal);
+    vec3 s = normalize( vec3( Spot.position) - Position );
+    vec3 spotDir = normalize( Spot.direction);
+    float angle = acos( dot(s, spotDir) );
+    float cutoff = radians( clamp( Spot.cutoff, 0.0, 90.0 ) );
+    vec3 ambient = Spot.intensity * Ka;
 
-vec3 ads(){
-  vec3 s = normalize( vec3(Spot.position) - Position);
-  float angle = acos(dot(-s,Spot.direction));
-  float cutoff = radians(clamp(Spot.cutoff,0.0,90.0));
-  vec3 ambient = Spot.intensity * Ka;
-  if(angle<cutoff){
-   float spotFactor = pow(dot(-s,Spot.direction), Spot.exponent); 
+    if( angle < cutoff ) {
+        float spotFactor = pow( dot(-s, spotDir), Spot.exponent );
+        vec3 v = normalize(vec3(-Position));
+        vec3 h = normalize( v + s );
 
-    vec3 v = normalize(vec3(-Position));
-    vec3 h = normalize(v + s);
-
-   return ambient +
-         spotFactor * Spot.intensity *(
-             Kd * max(dot(s,Normal),0.0)+
-             Ks*pow(max(dot(h,Normal),0.0),Shininess));
- }
- else {
-   return vec3(0,1,0); //ambient;
-
-   }
+        return
+            ambient +
+            spotFactor * Spot.intensity * (
+              Kd * max( dot(s, n), 0.0 ) +
+              Ks * pow( max( dot(h,n), 0.0 ), Shininess )
+           );
+    } else {
+        return ambient;
+    }
 }
 
-void main()
-{
-  FragColor = vec4(ads(),1.0);
+void main() {
+    FragColor = vec4(adsWithSpotlight(), 1.0);
 }
