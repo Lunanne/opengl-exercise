@@ -15,7 +15,6 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#include "../ThirdParty/stb_image.h"
 #include "../Graphics/GraphicsTypes.h"
 #include "FileReader.h"
 
@@ -41,27 +40,6 @@ char* FileReader::ReadFile(const char* p_fileName)
     return "";
 }
 
-Image FileReader::ReadPNG(const char* p_fileName)
-{
-    Image image;
-    int width, height, channels;
-    FILE* file = fopen(p_fileName, "rb");
-    if (file)
-    {
-        unsigned char* data = stbi_load_from_file(file, &width, &height, &channels, 0);
-        image.width = width;
-        image.height = height;
-        image.bitDepth = 8;
-        image.format = GL_RGBA;
-        image.data = new unsigned char[width * height * channels];
-        memcpy(image.data, data, sizeof(unsigned char)* width * height * channels);
-        stbi_image_free(data);
-    }
-    else{
-        fprintf(stderr, "cannot find file %s",p_fileName  );
-    }
-    return image;
-}
 
 const aiScene* FileReader::ReadScene(const std::string& p_filePath, Assimp::Importer& p_importer)
 {

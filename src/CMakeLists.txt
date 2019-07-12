@@ -8,7 +8,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 #if(NOT WIN32)
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 #endif(NOT WIN32)
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
 
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 
 find_package(OpenGL REQUIRED)
 find_package(GLM REQUIRED)
@@ -18,8 +20,8 @@ find_package(GLFW REQUIRED)
 find_package(PNG REQUIRED)
 find_package(ASSIMP REQUIRED)
 
-if(APPLE)
-SET(CMAKE_CXX_FLAGS "-std=c++11")
+if (APPLE)
+    SET(CMAKE_CXX_FLAGS "-std=c++11")
     set(CMAKE_FIND_FRAMEWORK ONLY)
     find_package(COCOA REQUIRED)
     find_package(CoreVideo REQUIRED)
@@ -45,15 +47,11 @@ add_subdirectory(Scene)
 
 
 set(MAIN_SRC
-main.cpp
-ThirdParty/stb_image.c)
-
-set(MAIN_H
-        ThirdParty/stb_image.h)
+        main.cpp
+        )
 
 
-
-add_executable(opengl-exercise ${MAIN_SRC} ${MAIN_H})
+add_executable(opengl-exercise ${MAIN_SRC})
 
 set_property(TARGET opengl-exercise PROPERTY CXX_STANDARD 11)
 
@@ -68,8 +66,8 @@ target_link_libraries(opengl-exercise ${PNG_LIBRARIES})
 target_link_libraries(opengl-exercise ${ASSIMP_LIBRARIES})
 
 target_link_libraries(opengl-exercise ${OPENGL_LIBRARIES})
-if(APPLE)
-target_link_libraries(opengl-exercise ${GLFW_LIBRARY})
+if (APPLE)
+    target_link_libraries(opengl-exercise ${GLFW_LIBRARY})
     target_link_libraries(opengl-exercise ${COCOA_LIBRARIES})
     target_link_libraries(opengl-exercise ${COCOA_LIBRARY})
     target_link_libraries(opengl-exercise ${CoreVideo_LIBRARIES})

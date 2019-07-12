@@ -1,14 +1,19 @@
-#version 330 core
-in vec3 in_position;
+#version 430
+layout (location = 0) in vec3 VertexPosition;
+layout (location = 1) in vec3 VertexNormal;
 
-in vec2 in_texCoords;
+out vec3 Position;
+out vec3 Normal;
 
-out vec2 UVcoords;
-uniform vec3 transform_position;
+uniform mat4 ModelViewMatrix;
+uniform mat3 NormalMatrix;
+uniform mat4 ProjectionMatrix;
 uniform mat4 MVP;
+
 void main()
 {
-vec3 position = in_position + transform_position;
-gl_Position =  MVP * vec4(position, 1);
-UVcoords = in_texCoords;
+  Normal = normalize( NormalMatrix * VertexNormal);
+  Position = vec3( ModelViewMatrix * vec4(VertexPosition,1.0));
+  gl_Position = MVP * vec4(VertexPosition,1.0);
 }
+

@@ -11,17 +11,15 @@
 class Material
 {
 public:
-    Material();
     Material(const aiMaterial* p_material);
-    Material(const Colour p_diffColour, const std::string& p_fileName);
-    ~Material();
-    void SetDiffuseColour(Colour p_colour);
-    void SetDiffuseTexture(const std::string& p_fileName);
-    const GLuint GetTextureID();
-
+    Colour getDiffuseColour(){return m_difColour;}
+    Colour getSpecularColour(){return m_specularColour;}
+    Colour getAmbientColour(){return m_ambientColour;}
+    float getShininess(){return m_shininess;}
 private:
     Colour m_difColour;
-    GLuint m_textureID;
-    Image m_image;
+    Colour m_ambientColour ;
+    Colour m_specularColour;
+    float m_shininess;
 };
 #endif

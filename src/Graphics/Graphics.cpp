@@ -4,7 +4,8 @@
 
 #include <vector>
 
-#include "../SceneObject.h"
+#include "../Scene/SceneTypes.h"
+#include "../Scene/SceneObject.h"
 
 #include "Graphics.h"
 
@@ -30,6 +31,7 @@ void Graphics::InitializeGL()
 void Graphics::PaintGL(GLFWwindow* p_window, const std::vector<SceneObjectPtr> p_sceneObjects)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 
     for (const SceneObjectPtr sceneObject : p_sceneObjects)
     {

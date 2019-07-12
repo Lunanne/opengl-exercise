@@ -13,7 +13,7 @@
 
 
 #include <glm/glm.hpp>
-
+#include "GraphicsTypes.h"
 class Shader
 {
 protected:
@@ -30,6 +30,6 @@ public:
     ~Shader();
     
     const GLuint GetProgramID() const { return m_programID;};
-    virtual void Use();
+    virtual void Use(MaterialPtr p_material);
 };
 #endif
