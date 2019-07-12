@@ -5,15 +5,15 @@
 
 std::map<ShaderType, Shader*> ShaderManager::shaders;
 
-void ShaderManager::Init(const Camera p_camera)
+void ShaderManager::Init(const Camera p_camera, const Light light)
 {
-    DefaultShader* defaultShader = new DefaultShader("../Resources/vertexShader.vert","../Resources/fragmentShader.frag", p_camera);
+    DefaultShader* defaultShader = new DefaultShader("./Resources/vertexShader.vert","./Resources/fragmentShader.frag", p_camera, light);
     shaders.insert(std::pair<ShaderType,Shader*>(ShaderType_Default,defaultShader));
 }
 
-void ShaderManager::UseShader(ShaderType p_shaderType)
+void ShaderManager::UseShader(ShaderType p_shaderType, MaterialPtr p_material)
 {
-    shaders[p_shaderType]->Use();
+    shaders[p_shaderType]->Use(p_material);
 }
 
 const GLuint ShaderManager::GetProgramID(ShaderType p_shaderType)

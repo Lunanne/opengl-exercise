@@ -78,7 +78,7 @@ Shader::~Shader()
         delete m_fragmentShader;
 }
 
-void Shader::Use()
+void Shader::Use(MaterialPtr p_material)
 {
     glUseProgram(m_programID);
 }

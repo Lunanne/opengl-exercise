@@ -25,7 +25,6 @@
 class RenderComponent
 {
 public:
-    RenderComponent(const std::vector<Vertex> p_vertices, const std::vector<TextureVertex> p_textureVertices, std::vector<Vertex> p_normalVertices);
     RenderComponent(const aiMesh* p_mesh, const aiMaterial* p_aiMaterial);
     ~RenderComponent();
     void Render(const Vertex p_physicsTransform);
@@ -33,8 +32,10 @@ public:
 private:
     GLuint                     m_vertexArrayID;
     GLuint                     m_vertexBufferID;
+    GLuint                     m_normalBufferID;
     GLuint                     m_textureBufferID;
     GLuint                     m_positionLoc;
+    GLuint                     m_normalLoc;
     GLuint                     m_textureCoordsLoc;
     GLuint                     m_programId;
     GLint m_transformVertex;

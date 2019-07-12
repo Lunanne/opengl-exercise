@@ -5,7 +5,7 @@
 #include <vector>
 #include <Scene/SceneTypes.h>
 
-#include "RenderComponent.h"
+#include "../SceneObject.h"
 
 #include "Graphics.h"
 
@@ -34,7 +34,7 @@ void Graphics::PaintGL(GLFWwindow* p_window, const std::vector<SceneObjectPtr> p
 
     for (const SceneObjectPtr sceneObjectPtr : p_sceneObjects)
     {
-        sceneObjectPtr->Render();
+        sceneObject->Render();
     }
 
     glfwSwapBuffers(p_window);

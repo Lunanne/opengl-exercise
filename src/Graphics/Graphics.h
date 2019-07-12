@@ -15,7 +15,6 @@
 #include "GraphicsTypes.h"
 #include "../Scene/SceneTypes.h"
 
-
 class Graphics
 {
 public:

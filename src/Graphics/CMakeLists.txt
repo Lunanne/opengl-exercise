@@ -18,7 +18,7 @@ include_directories("../Tools")
  Material.h
  Shader.h
  ShaderManager.h
- DefaultShader.h Camera.h)
+ DefaultShader.h Camera.h Light.h)
 
 
 add_library(graphics ${GRAPHICS_H} ${GRAPHICS_SRC})
