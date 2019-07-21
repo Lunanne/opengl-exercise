@@ -102,10 +102,13 @@ void RenderComponent::Render(Vertex physicsTransform)
         CreateVAO();
         m_createdVao = true;
     }
-    ShaderManager::UseShader(m_shaderType);
+    ShaderManager::UseShader(m_shaderType, m_material);
 
     glm::vec3 v(physicsTransform.x, physicsTransform.y, physicsTransform.z);
+    fprintf(stdout,"%f %f %f \n", v.x, v.y, v.z);
+
     m_transformVertex= glGetUniformLocation(m_programId, "transform_position");
+    glUniform3fv(m_transformVertex, 1, &v[0]);
 
   glDisable(GL_CULL_FACE);
     glFrontFace(GL_CW);

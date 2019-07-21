@@ -21,18 +21,21 @@
 #include "Scene/Scene.h"
 #include "Physics/World.h"
 
-static void error_callback(int error, const char *description) {
+static void error_callback(int error, const char *description)
+{
     fprintf(stderr, "Error description %s \n", description);
 }
 
-static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
+{
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
 static void
 debug_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *message,
-               const void *param) {
+               const void *param)
+{
     // ignore non-significant error/warning codes
     if (id == 131169 || id == 131185 || id == 131218 || id == 131204) return;
 
@@ -111,7 +114,8 @@ debug_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei l
 
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     glfwSetErrorCallback(error_callback);
     if (!glfwInit()) {
         fprintf(stderr, "Failed to initialize GLFW\n");
@@ -125,9 +129,8 @@ int main(int argc, char **argv) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 
-    GLFWwindow* window = glfwCreateWindow(1024, 768, "Opengl exercise", NULL, NULL);
-    if (!window)
-    {
+    GLFWwindow *window = glfwCreateWindow(1024, 768, "Opengl exercise", NULL, NULL);
+    if (!window) {
         fprintf(stderr, "Failed to open GLFW window.");
         glfwTerminate();
         return -1;
@@ -157,15 +160,15 @@ int main(int argc, char **argv) {
 
     Scene scene("./Resources/world.blend");
     ShaderManager::Init(scene.GetCamera(), scene.GetLight());
-        world.AddPhysicComponents(scene.GetSceneObjects());
+    world.AddPhysicComponents(scene.GetSceneObjects());
 
     while (!glfwWindowShouldClose(window)) {
-                world.SimulatePhysics();
+        world.SimulatePhysics();
 
         graphics.PaintGL(window, scene.GetSceneObjects());
         glfwPollEvents();
     }
-    
+
     ShaderManager::Clear();
     glfwDestroyWindow(window);
     glfwTerminate();

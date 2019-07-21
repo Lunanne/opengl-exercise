@@ -5,6 +5,7 @@
 #include "../Graphics/RenderComponent.h"
 
 #include "SceneObject.h"
+#include "glm/ext.hpp"
 
 SceneObject::SceneObject(const std::string &p_name) {
     m_name = p_name;
