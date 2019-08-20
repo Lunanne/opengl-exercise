@@ -1,3 +1,5 @@
+include_directories(${GLFW3_INCLUDE_DIRS})
+
 set(SCENE_SRC
         Scene.cpp
         SceneObject.cpp)

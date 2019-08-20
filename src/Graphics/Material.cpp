@@ -10,6 +10,9 @@
 #endif
 
 #include <stdlib.h>
+#include <assimp/types.h>
+
+
 #include "../Tools/FileReader.h"
 #include "Material.h"
 

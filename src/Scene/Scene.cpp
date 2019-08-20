@@ -4,6 +4,7 @@
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
+#define GLM_FORCE_RADIANS
 #include <glm/gtx/string_cast.hpp>
 
 #include "../Tools/FileReader.h"
